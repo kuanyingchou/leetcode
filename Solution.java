@@ -1,6 +1,6 @@
 public class Solution {
     //Single Number
-    public int singleNumber(int[] nums) {
+    public static int singleNumber(int[] nums) {
         for(int i=0; i<nums.length; i++) {
             final int t = nums[i];
             boolean isTwin = false;
@@ -17,6 +17,9 @@ public class Solution {
         }
         throw new RuntimeException("There is no single number!");
     }
+    public static void testSingleNumber() {
+        System.out.println(singleNumber(new int[] {3, 5, 1, 9, 3, 1, 9}));
+    }
 
 
     //Invert Binary Tree
@@ -29,7 +32,7 @@ public class Solution {
             return val + "("+ (left!=null?left:"") +", "+(right!=null?right:"")+")";
         }
     }
-    public TreeNode invertTree(TreeNode root) {
+    public static TreeNode invertTree(TreeNode root) {
         if(root == null) return null;
         final TreeNode temp = root.left;
         root.left = root.right;
@@ -38,11 +41,7 @@ public class Solution {
         invertTree(root.right);
         return root;
     }
-
-    public static void main(String[] args) {
-        final Solution s= new Solution();
-        System.out.println(s.singleNumber(new int[] {3, 5, 1, 9, 3, 1, 9}));
-
+    public static void testInvertTree() {
         TreeNode root = new TreeNode(4);
         root.left = new TreeNode(2);
         root.right = new TreeNode(7);
@@ -51,7 +50,28 @@ public class Solution {
         root.right.left = new TreeNode(6);
         root.right.right = new TreeNode(9);
         System.out.println(root);
-        s.invertTree(root);
+        invertTree(root);
         System.out.println(root);
+    }
+
+    //Contains Duplicate II
+    public static boolean containsNearbyDuplicate(int[] nums, int k) {
+        for(int i=0; i<nums.length; i++) {
+            for(int j=i+1; j<nums.length; j++) {
+                if((j-i) <= k && nums[i] == nums[j]) return true;
+            }
+        }
+        return false;
+    }
+    public static void testContainsNearbyDuplicate() {
+        System.out.println(containsNearbyDuplicate(new int[] {1, 2, 3, 4, 1}, 3));
+        System.out.println(containsNearbyDuplicate(new int[] {1, 2, 3, 1, 5}, 3));
+    }
+
+    public static void main(String[] args) {
+        testSingleNumber();
+        testInvertTree();
+        testContainsNearbyDuplicate();
+
     }
 }
