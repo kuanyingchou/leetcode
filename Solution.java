@@ -4,7 +4,8 @@ public class Solution {
         if(!predicate) throw new RuntimeException("oh oh");
     }
     public static void assertEquals(Object lhs, Object rhs) {
-        if(lhs != rhs) throw new RuntimeException("expected "+lhs+" but got "+rhs); //or equals()?
+        if(!lhs.equals(rhs)) throw new RuntimeException(
+                "expected \""+lhs+"\" but got \""+rhs+"\""); //or equals()?
     }
     public static void printArray(int[] arr) {
         System.out.print("[");
@@ -88,7 +89,8 @@ public class Solution {
     //Contains Duplicate II
     public static boolean containsNearbyDuplicate(int[] nums, int k) {
         for(int i=0; i<nums.length; i++) {
-            for(int j=i+1; j<nums.length && (j-i) <= k; j++) {
+            final int end = Math.min(nums.length-1, i+k);
+            for(int j=i+1; j<=end; j++) {
                 if(nums[i] == nums[j]) return true;
             }
         }
@@ -99,10 +101,64 @@ public class Solution {
         System.out.println(containsNearbyDuplicate(new int[] {1, 2, 3, 1, 5}, 3));
     }
 
+    //Roman to Int
+    public static int romanToInt(String s) {
+        //I:1
+        //V:5
+        //X:10
+        //L:50
+        //C:100
+        //D:500
+        //M:1000
+        if(s == null || s.length() == 0) throw new RuntimeException("empty input");
+
+        int res = 0;
+        for(int i=0; i<s.length(); i++) {
+            final char c = s.charAt(i);
+            switch(c) {
+            case 'I': 
+                if(i+1<s.length() && "VX".indexOf(s.charAt(i+1)) >= 0) {
+                    res -= 1;
+                } else {
+                    res += 1; 
+                }
+                break;
+            case 'V': res += 5; break;
+            case 'X': 
+                if(i+1<s.length() && "LC".indexOf(s.charAt(i+1)) >= 0) {
+                    res -= 10;
+                } else {
+                    res += 10; 
+                }
+                break;
+            case 'L': res += 50; break;
+            case 'C': 
+                if(i+1<s.length() && "DM".indexOf(s.charAt(i+1)) >= 0) {
+                    res -= 100;
+                } else {
+                    res += 100; 
+                }
+                break;
+            case 'D': res += 500; break;
+            case 'M': res += 1000; break;
+            default: throw new RuntimeException("unkonw roman number: "+c);
+            }
+        }
+        return res;
+    }
+    public static void testRomanToInt() {
+        assertEquals(romanToInt("I"), 1);
+        assertEquals(romanToInt("V"), 5);
+        assertEquals(romanToInt("X"), 10);
+        assertEquals(romanToInt("XXV"), 25);
+        assertEquals(romanToInt("XXVI"), 26);
+        assertEquals(romanToInt("MCMXCVI"), 1996);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
         testContainsNearbyDuplicate();
-
+        testRomanToInt();
     }
 }
