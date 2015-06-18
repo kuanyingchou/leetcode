@@ -1,4 +1,5 @@
 public class Solution {
+    //utilities
     public static void assertTrue(boolean predicate) {
         if(!predicate) throw new RuntimeException("oh oh");
     }
@@ -13,15 +14,17 @@ public class Solution {
         }
         System.out.println("]");
     }
+
     //Single Number
     public static int singleNumber(int[] nums) {
+        if(nums.length % 2 == 0) throw new RuntimeException("what?");
         for(int i=0; i<nums.length-1; i++) {
             final int t = nums[i];
-            boolean isTwin = false;
+            boolean hasTwin = false;
             for(int j=i+1; j<nums.length; j++) {
                 //System.out.println(i + ", "+j);
                 if(t == nums[j]) {
-                    isTwin = true;
+                    hasTwin = true;
                     if(j != i+1) {
                         final int temp = nums[i+1];
                         nums[i+1] = nums[j];
@@ -31,7 +34,7 @@ public class Solution {
                     break;
                 }
             }
-            if(!isTwin) {
+            if(!hasTwin) {
                 return t;
             }
             
