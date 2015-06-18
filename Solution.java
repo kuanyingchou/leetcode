@@ -1,3 +1,6 @@
+import java.util.Set;
+import java.util.HashSet;
+
 public class Solution {
     //utilities
     public static void assertTrue(boolean predicate) {
@@ -5,7 +8,7 @@ public class Solution {
     }
     public static void assertEquals(Object lhs, Object rhs) {
         if(!lhs.equals(rhs)) throw new RuntimeException(
-                "expected \""+lhs+"\" but got \""+rhs+"\""); //or equals()?
+                "expected \""+rhs+"\" but got \""+lhs+"\""); //or equals()?
     }
     public static void printArray(int[] arr) {
         System.out.print("[");
@@ -16,7 +19,7 @@ public class Solution {
         System.out.println("]");
     }
 
-    //Single Number
+    //1. Single Number
     public static int singleNumber(int[] nums) {
         if(nums.length % 2 == 0) throw new RuntimeException("what?");
         for(int i=0; i<nums.length-1; i++) {
@@ -54,7 +57,7 @@ public class Solution {
     }
 
 
-    //Invert Binary Tree
+    //2. Invert Binary Tree
     public static class TreeNode {
         int val;
         TreeNode left;
@@ -86,7 +89,7 @@ public class Solution {
         System.out.println(root);
     }
 
-    //Contains Duplicate II
+    //3. Contains Duplicate II
     public static boolean containsNearbyDuplicate(int[] nums, int k) {
         for(int i=0; i<nums.length; i++) {
             final int end = Math.min(nums.length-1, i+k);
@@ -96,12 +99,26 @@ public class Solution {
         }
         return false;
     }
-    public static void testContainsNearbyDuplicate() {
-        System.out.println(containsNearbyDuplicate(new int[] {1, 2, 3, 4, 1}, 3));
-        System.out.println(containsNearbyDuplicate(new int[] {1, 2, 3, 1, 5}, 3));
+    public static boolean containsNearbyDuplicate2(int[] nums, int k) {
+        if(k == 0) return false;
+        final Set<Integer> w = new HashSet<Integer>();
+        for(int i=0; i<nums.length; i++) {
+            final int t = nums[i];
+            if(w.size() == k+1) {
+                w.remove(nums[i-k-1]);
+            }
+            if(!w.add(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static void testContainsNearbyDuplicate2() {
+        assertEquals(containsNearbyDuplicate(new int[] {1, 2, 3, 4, 1}, 3), false);
+        assertEquals(containsNearbyDuplicate(new int[] {1, 2, 3, 1, 5}, 3), true);
     }
 
-    //Roman to Int
+    //4. Roman to Int
     public static int romanToInt(String s) {
         //I:1
         //V:5
@@ -155,10 +172,32 @@ public class Solution {
         assertEquals(romanToInt("MCMXCVI"), 1996);
     }
 
+    //5. Contains Duplicate
+    public static boolean containsDuplicate(int[] nums) {
+        for(int i=0; i<nums.length; i++) {
+            for(int j=i+1; j<nums.length; j++) {
+                if(nums[i] == nums[j]) return true;
+            }
+        }
+        return false;
+    }
+    public static boolean containsDuplicateImpl1(int[] nums) {
+        final Set<Integer> b = new HashSet<Integer>();
+        for(int i : nums) {
+            if(!b.add(i)) return true;
+        }
+        return false;
+    }
+    public static void testContainsDuplicate() {
+        assertEquals(containsDuplicateImpl1(new int[] {1, 2, 3, 4, 5}), false);
+        assertEquals(containsDuplicateImpl1(new int[] {1, 2, 3, 4, 1}), true);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
-        testContainsNearbyDuplicate();
+        testContainsNearbyDuplicate2();
         testRomanToInt();
+        testContainsDuplicate();
     }
 }
