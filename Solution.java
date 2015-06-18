@@ -1,12 +1,33 @@
 public class Solution {
+    public static void assertTrue(boolean predicate) {
+        if(!predicate) throw new RuntimeException("oh oh");
+    }
+    public static void assertEquals(Object lhs, Object rhs) {
+        if(lhs != rhs) throw new RuntimeException("expected "+lhs+" but got "+rhs); //or equals()?
+    }
+    public static void printArray(int[] arr) {
+        System.out.print("[");
+        for(int i=0; i<arr.length; i++) {
+            System.out.print(arr[i]);
+            System.out.print(", ");
+        }
+        System.out.println("]");
+    }
     //Single Number
     public static int singleNumber(int[] nums) {
-        for(int i=0; i<nums.length; i++) {
+        for(int i=0; i<nums.length-1; i++) {
             final int t = nums[i];
             boolean isTwin = false;
             for(int j=i+1; j<nums.length; j++) {
+                //System.out.println(i + ", "+j);
                 if(t == nums[j]) {
                     isTwin = true;
+                    if(j != i+1) {
+                        final int temp = nums[i+1];
+                        nums[i+1] = nums[j];
+                        nums[j] = temp;
+                    }
+                    i++;
                     break;
                 }
             }
@@ -14,11 +35,18 @@ public class Solution {
                 return t;
             }
             
+            //printArray(nums);
         }
-        throw new RuntimeException("There is no single number!");
+        //System.out.println("last");
+        //printArray(nums);
+        return nums[nums.length-1];
+        //throw new RuntimeException("There is no single number!");
     }
     public static void testSingleNumber() {
-        System.out.println(singleNumber(new int[] {3, 5, 1, 9, 3, 1, 9}));
+        //assertTrue(singleNumber(new int[] {3}) == 3);
+        //assertTrue(singleNumber(new int[] {3, 5, 1, 9, 3, 1, 9}) == 5);
+        assertEquals(singleNumber(new int[] {3, 5, 5, 3, 7}), 7);
+        assertEquals(singleNumber(new int[] {3, 5, 1, 9, 3, 1, 9, 5, 7}), 7);
     }
 
 
@@ -57,8 +85,8 @@ public class Solution {
     //Contains Duplicate II
     public static boolean containsNearbyDuplicate(int[] nums, int k) {
         for(int i=0; i<nums.length; i++) {
-            for(int j=i+1; j<nums.length; j++) {
-                if((j-i) <= k && nums[i] == nums[j]) return true;
+            for(int j=i+1; j<nums.length && (j-i) <= k; j++) {
+                if(nums[i] == nums[j]) return true;
             }
         }
         return false;
