@@ -279,6 +279,32 @@ public class Solution {
         assertEquals(isIsomorphic("ab", "aa"), false);
     }
 
+    //8. Count Primes
+    public static int countPrimes(int n) {
+        int count = 0;
+        for(int i=2; i<n; i++) {
+            if(isPrime(i)) {
+                System.out.println(i);
+                count++;
+            }
+        }
+        return count;
+    }
+    public static boolean isPrime(int n) {
+        for(int i=2; i<=n/2; i++) {
+            if(n % i == 0) return false;
+        }
+        return true;
+    }
+    public static void testCountPrimes() {
+        //2, 3, 5, 7, 11, 13, 17, 19
+        assertEquals(countPrimes(1), 0);
+        assertEquals(countPrimes(2), 0);
+        assertEquals(countPrimes(3), 1);
+        assertEquals(countPrimes(4), 2);
+        assertEquals(countPrimes(20), 8);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -287,5 +313,6 @@ public class Solution {
         testContainsDuplicate();
         testReverseList();
         testIsIsomorphic();
+        testCountPrimes();
     }
 }
