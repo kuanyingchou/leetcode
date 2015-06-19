@@ -1,5 +1,7 @@
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Solution {
     //utilities
@@ -253,6 +255,30 @@ public class Solution {
         assertEquals(reverseList(g), new ListNode(3));
     }
 
+    //7. Isomorphic Strings
+    public static boolean isIsomorphic(String s, String t) {
+        final Map<Character, Character> map = new HashMap<Character, Character>();
+        final Map<Character, Character> bMap = new HashMap<Character, Character>();
+        for(int i=0; i<s.length(); i++) {
+            char from = s.charAt(i);
+            char to = t.charAt(i);
+            Character old = map.put(from, to);
+            if(old!= null && !old.equals(to)) return false;
+            
+            old = bMap.put(to, from);
+            if(old!= null && !old.equals(from)) return false;
+            //System.out.println("putting "+from+" - "+to);
+
+        }
+        return true;
+    }
+    public static void testIsIsomorphic() {
+        assertEquals(isIsomorphic("egg", "add"), true);
+        assertEquals(isIsomorphic("foo", "bar"), false);
+        assertEquals(isIsomorphic("paper", "title"), true);
+        assertEquals(isIsomorphic("ab", "aa"), false);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -260,5 +286,6 @@ public class Solution {
         testRomanToInt();
         testContainsDuplicate();
         testReverseList();
+        testIsIsomorphic();
     }
 }
