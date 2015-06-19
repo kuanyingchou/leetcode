@@ -193,11 +193,72 @@ public class Solution {
         assertEquals(containsDuplicateImpl1(new int[] {1, 2, 3, 4, 1}), true);
     }
 
+    //6. Reverse Linked List
+    //Definition for singly-linked list.
+    public static class ListNode {
+        int val;
+        public ListNode next;
+        public ListNode(int x) { val = x; }
+
+        @Override
+        public boolean equals(Object o) {
+            if(o == null) return false;
+            if(!(o instanceof ListNode)) return false;
+            final ListNode that = (ListNode) o;
+            for(ListNode p=this, q=that; 
+                    p != null && q != null;
+                    p=p.next, q=q.next) {
+                if(p.val != q.val) return false;
+            }
+            return true;
+            
+        }
+
+        @Override
+        public String toString() {
+            return val + ((next==null)?"":", " + next.toString());
+        }
+    }
+    public static ListNode reverseList(ListNode head) {
+        if(head == null) return null;
+        ListNode newHead = null;
+        ListNode curr = null;
+        while(head != null) {
+            curr = head;
+            head = head.next;
+            curr.next = newHead;
+            newHead = curr;
+        }
+
+        return newHead;
+    }
+    public static void testReverseList() {
+        final ListNode a = new ListNode(3);
+        final ListNode b = new ListNode(5);
+        final ListNode c = new ListNode(7);
+        a.next = b;
+        b.next = c;
+
+        final ListNode d = new ListNode(7);
+        final ListNode e = new ListNode(5);
+        final ListNode f = new ListNode(3);
+        d.next = e;
+        e.next = f;
+
+        //System.out.println(a);
+        //System.out.println(d);
+        assertEquals(reverseList(a), d);
+
+        final ListNode g = new ListNode(3);
+        assertEquals(reverseList(g), new ListNode(3));
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
         testContainsNearbyDuplicate2();
         testRomanToInt();
         testContainsDuplicate();
+        testReverseList();
     }
 }
