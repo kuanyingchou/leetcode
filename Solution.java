@@ -8,9 +8,15 @@ public class Solution {
     public static void assertTrue(boolean predicate) {
         if(!predicate) throw new RuntimeException("oh oh");
     }
-    public static void assertEquals(Object lhs, Object rhs) {
-        if(!lhs.equals(rhs)) throw new RuntimeException(
-                "expected \""+rhs+"\" but got \""+lhs+"\""); //or equals()?
+    public static void assertEquals(Object actual, Object expected) {
+        if(actual == null) {
+            if(expected == null) { return; }
+        } else {
+            if(actual.equals(expected)) return;
+        }
+
+        throw new RuntimeException(
+                "expected \""+expected+"\" but got \""+actual+"\""); //or equals()?
     }
     public static void printArray(int[] arr) {
         System.out.print("[");
@@ -202,16 +208,24 @@ public class Solution {
         public ListNode next;
         public ListNode(int x) { val = x; }
 
+        public void append(int x) {
+            ListNode i = null;
+            for(i = this; i.next!=null; i=i.next) { }
+            i.next = new ListNode(x);
+        }
+
         @Override
         public boolean equals(Object o) {
             if(o == null) return false;
             if(!(o instanceof ListNode)) return false;
             final ListNode that = (ListNode) o;
-            for(ListNode p=this, q=that; 
-                    p != null && q != null;
+            ListNode p=this, q=that;
+            for(; p != null && q != null;
                     p=p.next, q=q.next) {
                 if(p.val != q.val) return false;
             }
+            if(p == null && q != null ||
+                    p != null && q == null) return false; //different length
             return true;
             
         }
@@ -296,13 +310,96 @@ public class Solution {
         }
         return true;
     }
+    public static int countPrimes2(int n) {
+        final boolean[] isPrime = new boolean[n]; //a table is like a function
+        for(int i=2; i<n; i++) {
+            isPrime[i] = true;
+        }
+        for(int i=2; i<n; i++) { //finish "the function" incrementally in runtime!
+            if(isPrime[i]) {
+                for(int j=i*i; j<n; j+=i) {
+                    isPrime[j]=false;
+                }
+            }
+
+        }
+        int count = 0;
+        for(int i=0; i<n; i++) {
+            if(isPrime[i]) count++;
+        }
+        return count;
+    }
     public static void testCountPrimes() {
         //2, 3, 5, 7, 11, 13, 17, 19
-        assertEquals(countPrimes(1), 0);
-        assertEquals(countPrimes(2), 0);
-        assertEquals(countPrimes(3), 1);
-        assertEquals(countPrimes(4), 2);
-        assertEquals(countPrimes(20), 8);
+        assertEquals(countPrimes2(1), 0);
+        assertEquals(countPrimes2(2), 0);
+        assertEquals(countPrimes2(3), 1);
+        assertEquals(countPrimes2(4), 2);
+        assertEquals(countPrimes2(20), 8);
+    }
+
+    public static ListNode removeElements(ListNode head, int val) {
+        if(head == null) return head;
+        while(head != null && head.val == val) {
+            ListNode t = head;
+            head = head.next;
+            t.next = null;
+        }
+        if(head == null) return head;
+
+        ListNode p = head;
+        ListNode q = head.next;
+        
+        while(q!=null) {
+            if(q.val == val) {
+                p.next = q.next;
+                q.next = null;
+                q = p.next;
+            } else {
+                p = q;
+                q = q.next;
+            }
+        }
+        return head;
+    }
+    public static void testRemoveElements() {
+        ListNode a = new ListNode(1);
+        a.append(2);
+        a.append(3);
+        a.append(1);
+        a.append(4);
+        a.append(5);
+        a.append(1);
+        //System.out.println(a);
+        ListNode c = removeElements(a, 1);
+
+        ListNode b = new ListNode(2);
+        b.append(3);
+        b.append(4);
+        b.append(5);
+        
+        assertEquals(c, b);
+
+        ListNode d = new ListNode(1);
+        ListNode e = removeElements(d, 1);
+        assertEquals(e, null);
+
+        ListNode f = new ListNode(1);
+        f.append(1);
+        ListNode g = removeElements(f, 1);
+        assertEquals(g, null);
+
+        ListNode h = new ListNode(1);
+        h.append(2);
+        h.append(1);
+        ListNode i = removeElements(h, 2);
+        ListNode j = new ListNode(1);
+        j.append(1);
+        assertEquals(i, j);
+        System.out.println(i);
+        System.out.println(j);
+
+
     }
 
     public static void main(String[] args) {
@@ -314,5 +411,6 @@ public class Solution {
         testReverseList();
         testIsIsomorphic();
         testCountPrimes();
+        testRemoveElements();
     }
 }
