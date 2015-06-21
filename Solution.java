@@ -468,7 +468,18 @@ public class Solution {
             leaves.addAll(toBeAdded); 
             toBeAdded.ensureCapacity(toBeAdded.size());
             toBeAdded.clear();
-            System.out.println(i+": leaf size: "+leaves.size());
+            //System.out.println(i+": leaf size: "+leaves.size());
+            int max = -1;
+            for(int j=leaves.size()-1; j>=0; j--) {
+                if(leaves.get(j).pass == 0) { 
+                    if(leaves.get(j).val > max) {
+                        max = leaves.get(j).val;
+                    }
+                    leaves.remove(j);
+                }
+            }
+            leaves.add(new RobNode(max, 0));
+            //System.out.println(i+": leaf size(after reducing): "+leaves.size());
         }
         int maxScore = -1;
         for(RobNode n : leaves) {
