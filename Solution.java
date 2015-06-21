@@ -2,6 +2,10 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Solution {
     //utilities
@@ -431,6 +435,69 @@ public class Solution {
         assertEquals(isHappy(19), true);
     }
 
+    //House Robber 
+
+    public static int rob(int[] nums) {
+        if(nums.length == 0) return 0;
+        if(nums.length == 1) return nums[0];
+
+        final List<RobNode> leaves = new ArrayList<RobNode>();
+        leaves.add(new RobNode(nums[0], 0)); //rob
+        leaves.add(new RobNode(0, 2)); //no rob
+        final ArrayList<RobNode> toBeAdded = new ArrayList<RobNode>();
+
+        for(int i=1; i<nums.length; i++) {
+            for(RobNode n : leaves) {
+            //while(!leaves.isEmpty()) {
+                //final RobNode n = leaves.remove();
+                if(n.pass == 0) {
+                    n.pass = 1; //can't rob this time
+                } else if(n.pass == 1) {
+                    if(i == nums.length -1) {
+                        n.pass = 0;
+                        n.val += nums[i];
+                    } else {
+                        n.pass = 2;
+                        toBeAdded.add(new RobNode(nums[i]+n.val, 0));
+                    }
+                } else { //2: gotta rob this time
+                    n.pass = 0;
+                    n.val += nums[i];
+                }
+            }
+            leaves.addAll(toBeAdded); 
+            toBeAdded.ensureCapacity(toBeAdded.size());
+            toBeAdded.clear();
+            System.out.println(i+": leaf size: "+leaves.size());
+        }
+        int maxScore = -1;
+        for(RobNode n : leaves) {
+            if(n.val > maxScore) maxScore = n.val;
+        }
+
+        return maxScore;
+    }
+    static class RobNode {
+        int val = 0;
+        int pass = 0;
+        public RobNode(int v, int p) { 
+            val = v;
+            pass = p;
+        }
+    }
+    public static void testRob() {
+        assertEquals(rob(new int[] {1}), 1);
+        assertEquals(rob(new int[] {0, 0}), 0);
+        assertEquals(rob(new int[] {1, 1}), 1);
+        assertEquals(rob(new int[] {3, 5, 1, 2, 4}), 9);
+
+        //rob(new int[] {183,219,57,193,94,233,202,154,65,240,97,234,100,249,186,66,90});
+        //rob(new int[] {183,219,57,193,94,233,202,154,65,240,97,234,100,249,186,66,90,238,168,128,177,235,50,81,185,165,217,207,88,80,112,78,135,62,228,247,211});
+        rob(new int[] {114,117,207,117,235,82,90,67,143,146,53,108,200,91,80,223,58,170,110,236,81,90,222,160,165,195,187,199,114,235,197,187,69,129,64,214,228,78,188,67,205,94,205,169,241,202,144,240});
+        rob(new int[] {155,44,52,58,250,225,109,118,211,73,137,96,137,89,174,66,134,26,25,205,239,85,146,73,55,6,122,196,128,50,61,230,94,208,46,243,105,81,157,89,205,78,249,203,238,239,217,212,241,242,157,79,133,66,36,165});
+    }
+
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -442,5 +509,6 @@ public class Solution {
         testCountPrimes();
         testRemoveElements();
         testIsHappy();
+        testRob();
     }
 }
