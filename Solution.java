@@ -402,6 +402,35 @@ public class Solution {
 
     }
 
+    //Happy Number
+    public static boolean isHappy(int n) {
+        int t = n;
+        final Set<Integer> set = new HashSet<Integer>();
+
+        while(t != 1) {
+            int sum = 0;
+            while(t > 0) {
+                final int d = t % 10;
+                sum += d * d;
+                t /= 10;
+            }
+            t = sum;
+            //System.out.println("sum = "+t);
+            if(!set.add(t)) {
+                //loop detected
+                //System.out.println("loop!");
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public static void testIsHappy() {
+        assertEquals(isHappy(1), true);
+        assertEquals(isHappy(2), false);
+        assertEquals(isHappy(19), true);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -412,5 +441,6 @@ public class Solution {
         testIsIsomorphic();
         testCountPrimes();
         testRemoveElements();
+        testIsHappy();
     }
 }
