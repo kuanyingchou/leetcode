@@ -508,6 +508,27 @@ public class Solution {
         rob(new int[] {155,44,52,58,250,225,109,118,211,73,137,96,137,89,174,66,134,26,25,205,239,85,146,73,55,6,122,196,128,50,61,230,94,208,46,243,105,81,157,89,205,78,249,203,238,239,217,212,241,242,157,79,133,66,36,165});
     }
 
+    // you need to treat n as an unsigned value
+    public static int hammingWeight(int n) {
+        int sum = 0;
+        if(n<0) {
+            n ^= Integer.MIN_VALUE;
+            sum++;
+        }
+        int t = n;
+        while(t != 0) {
+            if(t % 2 == 1) {
+                sum++;
+            }
+            t = t / 2;
+        }
+        return sum;
+    }
+    public static void testHammingWeight() {
+        assertEquals(hammingWeight(11), 3);
+        assertEquals(hammingWeight(Integer.MIN_VALUE), 1);
+    }
+
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -521,5 +542,6 @@ public class Solution {
         testRemoveElements();
         testIsHappy();
         testRob();
+        testHammingWeight();
     }
 }
