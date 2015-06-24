@@ -584,6 +584,31 @@ public class Solution {
                 //new int[] {5,6,7,1,2,3,4});
     }
 
+    public static String longestCommonPrefix(String[] strs) {
+        if(strs == null || strs.length == 0) return "";
+        int lcp = strs[0].length();
+        for(int i=1; i<strs.length; i++) {
+            if(lcp > strs[i].length()) {
+                lcp = strs[i].length();
+            }
+            for(int j=0; j<lcp; j++) {
+                if(strs[0].charAt(j) != strs[i].charAt(j)) {
+                    lcp = j;
+                    break;
+                }
+            }
+            //System.out.println(strs[i] + " - " + lcp);
+        }
+        return strs[0].substring(0, lcp);
+    }
+    public static void testLongestCommonPrefix() {
+        assertEquals(
+                longestCommonPrefix(new String[] {
+                "abcdef", "abc", "ab"}), "ab");
+        assertEquals(
+                longestCommonPrefix(new String[] {
+                "abc", "abcdef", "abcdefg"}), "abc");
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -600,5 +625,6 @@ public class Solution {
         testHammingWeight();
         testReverseBits();
         testRotate();
+        testLongestCommonPrefix();
     }
 }
