@@ -529,6 +529,36 @@ public class Solution {
         assertEquals(hammingWeight(Integer.MIN_VALUE), 1);
     }
 
+    // you need treat n as an unsigned value
+    public static int reverseBits(int n) {
+        int res = 0;
+        for(int i=31; i>=0; i--) {
+            //System.out.print(Integer.toBinaryString(res));
+            //System.out.print(" - ");
+            res |= ((n & 1) << i);
+            n = n >>> 1;
+            //System.out.println(Integer.toBinaryString(res));
+        }
+        return res;
+    }
+    public static void testReverseBits() {
+        /*
+        System.out.println(Integer.toBinaryString(1));
+        System.out.println(Integer.toBinaryString(1<<31));
+        System.out.println(Integer.toBinaryString(Integer.MAX_VALUE));
+        System.out.println(Integer.toBinaryString(Integer.MAX_VALUE<<1));
+        System.out.println(Integer.toBinaryString(Integer.MIN_VALUE));
+        System.out.println(Integer.toBinaryString(Integer.MIN_VALUE>>1));
+        System.out.println(Integer.toBinaryString(Integer.MIN_VALUE>>>10));
+        System.out.println(Integer.toBinaryString(Integer.MIN_VALUE>>>31));
+        */
+
+        assertEquals(reverseBits(43261596), 964176192);
+        assertEquals(reverseBits(1), Integer.MIN_VALUE);
+        assertEquals(reverseBits(Integer.MIN_VALUE), 1);
+          
+    }
+
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -543,5 +573,6 @@ public class Solution {
         testIsHappy();
         testRob();
         testHammingWeight();
+        testReverseBits();
     }
 }
