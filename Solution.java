@@ -562,21 +562,13 @@ public class Solution {
     }
 
     public static void rotate(int[] nums, int k) {
-        int index = 0;
-        int carry = 0;
-        boolean hasCarry = false;
-        do {
-            int newIndex = (index+k)%nums.length;
-            int t = nums[newIndex];
-            nums[newIndex] = hasCarry?carry:nums[index];
-            carry = t;
-            hasCarry = true;
-
-            System.out.print(index + " -> " + newIndex+", carry: "+carry +" ");
-            index = newIndex;
-            System.out.println(Arrays.toString(nums));
-
-        } while(index != 0);
+        int[] res = new int[nums.length];
+        for(int i = 0; i<nums.length; i++) {
+            res[(i+k)%nums.length] = nums[i];
+        }
+        for(int i = 0; i<nums.length; i++) {
+            nums[i] = res[i];
+        }
     }
     public static void testRotate() {
         final int[] a1 = new int[] {1,2,3,4,5,6,7};
