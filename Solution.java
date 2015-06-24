@@ -6,6 +6,7 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Solution {
     //utilities
@@ -18,6 +19,7 @@ public class Solution {
         } else {
             if(actual.equals(expected)) return;
         }
+        //arrays >>>
 
         throw new RuntimeException(
                 "expected \""+expected+"\" but got \""+actual+"\""); //or equals()?
@@ -559,6 +561,37 @@ public class Solution {
           
     }
 
+    public static void rotate(int[] nums, int k) {
+        int index = 0;
+        int carry = 0;
+        boolean hasCarry = false;
+        do {
+            int newIndex = (index+k)%nums.length;
+            int t = nums[newIndex];
+            nums[newIndex] = hasCarry?carry:nums[index];
+            carry = t;
+            hasCarry = true;
+
+            System.out.print(index + " -> " + newIndex+", carry: "+carry +" ");
+            index = newIndex;
+            System.out.println(Arrays.toString(nums));
+
+        } while(index != 0);
+    }
+    public static void testRotate() {
+        final int[] a1 = new int[] {1,2,3,4,5,6,7};
+        System.out.println(Arrays.toString(a1));
+        rotate(a1, 3);
+        System.out.println(Arrays.toString(a1));
+
+        final int[] a2 = new int[] {1,2,3,4,5,6};
+        System.out.println(Arrays.toString(a2));
+        rotate(a2, 2);
+        System.out.println(Arrays.toString(a2));
+        //assertEquals(a1, 
+                //new int[] {5,6,7,1,2,3,4});
+    }
+
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -574,5 +607,6 @@ public class Solution {
         testRob();
         testHammingWeight();
         testReverseBits();
+        testRotate();
     }
 }
