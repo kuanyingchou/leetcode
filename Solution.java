@@ -610,6 +610,61 @@ public class Solution {
                 "abc", "abcdef", "abcdefg"}), "abc");
     }
 
+    static class Range {
+        private int[] range = new int[2];
+        private int index=-1;
+        public void add(int n) {
+            if(index == -1 || index == 0) {
+                range[++index] = n;
+            } else {
+                range[index] = n;
+            }
+        }
+        public boolean hasValue() {
+            return index >= 0;
+        }
+        public void reset() {
+            index = -1;
+        }
+        public String toString() {
+            if(index == -1) {
+                return "";
+            } else if(index == 0) {
+                return Integer.toString(range[0]);
+            } else {
+                return range[0] + "->" + range[1];
+            }
+        }
+    }
+    public static List<String> summaryRanges(int[] nums) {
+        final List<String> res = new ArrayList<String>();
+        if(nums == null || nums.length == 0) return res; 
+
+
+        Range r = new Range();
+        r.add(nums[0]);
+        for(int i=0, j=1; j<nums.length; i++, j++) {
+            if(nums[j] - nums[i] == 1) {
+                r.add(nums[j]);
+            } else {
+                res.add(r.toString());
+                r.reset();
+                r.add(nums[j]);
+            }
+        }
+        if(r.hasValue()) {
+            res.add(r.toString());
+        }
+        return res;
+    }
+    public static void testSummaryRanges() {
+        System.out.println(summaryRanges(new int[] {}));
+        System.out.println(summaryRanges(new int[] {0}));
+        System.out.println(summaryRanges(new int[] {0, 1, 2}));
+        System.out.println(summaryRanges(new int[] {1, 3, 5}));
+        System.out.println(summaryRanges(new int[] {0, 1, 2, 4, 5, 7}));
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -626,5 +681,6 @@ public class Solution {
         testReverseBits();
         testRotate();
         testLongestCommonPrefix();
+        testSummaryRanges();
     }
 }
