@@ -665,6 +665,46 @@ public class Solution {
         System.out.println(summaryRanges(new int[] {0, 1, 2, 4, 5, 7}));
     }
 
+    static class Rect {
+        int x1, y1, x2, y2;
+        public Rect(int x1, int y1, int x2, int y2) {
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+        }
+        public int surface() {
+            return (x2-x1) * (y2-y1);
+        }
+        public int intersection(Rect that) {
+            final int rx = Math.min(x2, that.x2);
+            final int lx = Math.max(x1, that.x1);
+            final int ty = Math.min(y2, that.y2);
+            final int by = Math.max(y1, that.y1);
+            if(rx <= lx) return 0;
+            if(ty <= by) return 0;
+            final int res = (rx - lx) * (ty - by);
+            //System.out.println("intersetion: "+res);
+            return res;
+        }
+    }
+    public static int computeArea(
+            int A, int B, int C, int D, int E, int F, int G, int H) {
+        final Rect r1 = new Rect(A, B, C, D);
+        final Rect r2 = new Rect(E, F, G, H);
+        return r1.surface() + r2.surface() - r1.intersection(r2);
+    }
+    public static void testComputeArea() {
+        assertEquals(computeArea(0, 0, 3, 3, 0, 0, 3, 3), 9);
+        assertEquals(computeArea(-3, 0, 3, 4, 0, -1, 9, 2), 45);
+        assertEquals(computeArea(0, 0, 0, 0, -1, -1, 1, 1), 4);
+        assertEquals(computeArea(-2, -2, 2, 2, 3, 3, 4, 4), 17);
+        assertEquals(computeArea(
+                    -1500000001, 0, -1500000000, 1, 
+                    1500000000, 0, 1500000001, 1), 2);
+        
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -682,5 +722,7 @@ public class Solution {
         testRotate();
         testLongestCommonPrefix();
         testSummaryRanges();
+        testComputeArea();
+        testTrailingZeroes();
     }
 }
