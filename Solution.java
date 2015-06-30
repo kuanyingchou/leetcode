@@ -705,6 +705,25 @@ public class Solution {
         
     }
 
+    public static int trailingZeroes(int n) {
+        int fac = 1;
+        for(int i=n; i>0; i--) {
+            fac *= i;
+        }
+        int count = 0;
+        while(fac != 0 && fac % 10 == 0) {
+            count++;
+            fac /= 10;
+        }
+        return count;
+    }
+    public static void testTrailingZeroes() {
+        assertEquals(trailingZeroes(0), 0);
+        assertEquals(trailingZeroes(6), 1);
+        assertEquals(trailingZeroes(10), 2);
+    }
+
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
