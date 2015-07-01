@@ -717,7 +717,7 @@ public class Solution {
         }
         return count;
     }
-    public static int trailingZeroes2(int n) {
+    public static int trailingZeroes2(int n) { //>>>
         //100
         //20 + f 20
         //4 + f 4
@@ -730,6 +730,25 @@ public class Solution {
         assertEquals(trailingZeroes2(10), 2);
     }
 
+    
+    public static int titleToNumber(String s) {
+        int res = 0;
+        int mul = 1;
+        for(int i=0; i<s.length(); i++) {
+            char c = s.charAt(s.length()-1-i);
+            res += mul * (c - 64);
+            mul *= 26;
+        }
+        return res;
+    }
+    public static void testTitleToNumber() {
+        assertEquals(titleToNumber("A"), 1);
+        assertEquals(titleToNumber("B"), 2);
+        assertEquals(titleToNumber("C"), 3);
+        assertEquals(titleToNumber("Z"), 26);
+        assertEquals(titleToNumber("AA"), 27);
+        assertEquals(titleToNumber("AB"), 28);
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -750,5 +769,6 @@ public class Solution {
         testSummaryRanges();
         testComputeArea();
         testTrailingZeroes();
+        testTitleToNumber();
     }
 }
