@@ -750,6 +750,35 @@ public class Solution {
         assertEquals(titleToNumber("AB"), 28);
     }
 
+    public static int majorityElement(int[] nums) {
+        final Map<Integer, Integer> records = new HashMap<Integer, Integer>();
+        for(int i=0; i<nums.length; i++) {
+            if(records.containsKey(nums[i])) {
+                records.put(nums[i], records.get(nums[i]) + 1);
+            } else {
+                records.put(nums[i], 1);
+            }
+        }
+        final Set<Integer> keys = records.keySet();
+        int max = Integer.MIN_VALUE;
+        int res = Integer.MIN_VALUE; //
+        for(Integer k: keys) {
+            final int v = records.get(k);
+            if(v > max) {
+                max = v;
+                res = k;
+            }
+        }
+        return res;
+    }
+    public static void testMajorityElement() {
+        assertEquals(majorityElement(new int[] {2, 3, 3, 3, 2}), 3);
+        assertEquals(majorityElement(new int[] {3, 3, 3, 2, 2}), 3);
+        assertEquals(majorityElement(new int[] {2, 2, 3, 3, 3}), 3);
+        assertEquals(majorityElement(new int[] {3, 2, 3, 2, 3}), 3);
+        assertEquals(majorityElement(new int[] {3, 2, 3}), 3);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -770,5 +799,6 @@ public class Solution {
         testComputeArea();
         testTrailingZeroes();
         testTitleToNumber();
+        testMajorityElement();
     }
 }
