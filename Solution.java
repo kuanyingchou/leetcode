@@ -717,10 +717,17 @@ public class Solution {
         }
         return count;
     }
+    public static int trailingZeroes2(int n) {
+        //100
+        //20 + f 20
+        //4 + f 4
+        //0 + f 0
+        return n == 0? 0: (n/5 + trailingZeroes2(n/5));
+    }
     public static void testTrailingZeroes() {
-        assertEquals(trailingZeroes(0), 0);
-        assertEquals(trailingZeroes(6), 1);
-        assertEquals(trailingZeroes(10), 2);
+        assertEquals(trailingZeroes2(0), 0);
+        assertEquals(trailingZeroes2(6), 1);
+        assertEquals(trailingZeroes2(10), 2);
     }
 
 
