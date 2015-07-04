@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class Solution {
     //utilities
@@ -805,6 +807,49 @@ public class Solution {
         assertEquals(convertToTitle(52), "AZ");
         assertEquals(convertToTitle(53), "BA");
     }
+
+    public static int compareVersion(String version1, String version2) {
+        final String[] v1 = version1.split("\\.");
+        final String[] v2 = version2.split("\\.");
+        final int min = Math.min(v1.length, v2.length);
+        int res = 0;
+        for(int i=0; i<min; i++) {
+            final int n1 = Integer.valueOf(v1[i]);
+            final int n2 = Integer.valueOf(v2[i]);
+            if(n1 > n2) { res = 1;  break; }
+            else if(n1 < n2) { res = -1;  break; }
+        }
+        if(res == 0) {
+            if(v1.length > v2.length) { 
+                for(int i=min; i<v1.length; i++) {
+                    if(Integer.valueOf(v1[i]) != 0) { 
+                        res = 1;
+                        break;
+                    }
+                }
+            } else if(v1.length < v2.length) { 
+                for(int i=min; i<v2.length; i++) {
+                    if(Integer.valueOf(v2[i]) != 0) { 
+                        res = -1;
+                        break; //>>>duplicates
+                    }
+                }
+            } 
+        }
+        return res;
+    }
+    public static void testCompareVersion() {
+        assertEquals(compareVersion("1.1", "0.1"), 1);
+        assertEquals(compareVersion("0.2", "1.1"), -1);
+        assertEquals(compareVersion("1.1", "1.1"), 0);
+        assertEquals(compareVersion("1.1.2", "1.1.1"), 1);
+        assertEquals(compareVersion("13.37", "13.35"), 1);
+        assertEquals(compareVersion("1.2", "1.1.1"), 1);
+        assertEquals(compareVersion("1.1.1", "1.1"), 1);
+        assertEquals(compareVersion("1.1", "1.1.1"), -1);
+        assertEquals(compareVersion("1.0", "1"), 0);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -827,5 +872,6 @@ public class Solution {
         testTitleToNumber();
         testMajorityElement();
         testConvertToTitle();
+        testCompareVersion();
     }
 }
