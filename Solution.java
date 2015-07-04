@@ -779,6 +779,32 @@ public class Solution {
         assertEquals(majorityElement(new int[] {3, 2, 3}), 3);
     }
 
+    public static String convertToTitle(int n) {
+        if(n == 0) throw new RuntimeException();
+        String res = "";
+        while(n != 0) {
+            int r = n % 26;
+            if(r == 0) {
+                res = 'Z' + res;
+                n--;
+            } else {
+                res = (char)(r + 64) + res;
+            }
+            n /= 26;
+        }
+        return res;
+    }
+    public static void testConvertToTitle() {
+        System.out.println((int)'A');
+        assertEquals(convertToTitle(1), "A");
+        assertEquals(convertToTitle(2), "B");
+        assertEquals(convertToTitle(3), "C");
+        assertEquals(convertToTitle(26), "Z");
+        assertEquals(convertToTitle(27), "AA");
+        assertEquals(convertToTitle(28), "AB");
+        assertEquals(convertToTitle(52), "AZ");
+        assertEquals(convertToTitle(53), "BA");
+    }
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -800,5 +826,6 @@ public class Solution {
         testTrailingZeroes();
         testTitleToNumber();
         testMajorityElement();
+        testConvertToTitle();
     }
 }
