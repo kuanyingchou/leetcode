@@ -242,6 +242,7 @@ public class Solution {
         public String toString() {
             return val + ((next==null)?"":", " + next.toString());
         }
+
     }
     public static ListNode reverseList(ListNode head) {
         if(head == null) return null;
@@ -850,6 +851,107 @@ public class Solution {
         assertEquals(compareVersion("1.0", "1"), 0);
     }
 
+    public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        int diff = length(headA) - length(headB);
+        if(diff > 0) {
+            for(int i=0; i<diff; i++) {
+                headA = headA.next;
+            }
+        } else if(diff < 0) {
+            for(int i=0; i<-diff; i++) {
+                headB = headB.next;
+            }
+        }
+        assert length(headA) == length(headB);
+
+        while(headA != headB) {
+            headA = headA.next;
+            headB = headB.next;
+        }
+        return headA;
+    }
+    public static int length(ListNode n) {
+        int count = 0;
+        while(n != null) {
+            count++;
+            n = n.next;
+        }
+        return count;
+    }
+    public static void testGetintersectionNode() {
+        final ListNode a = new ListNode(1);
+        final ListNode b = new ListNode(3);
+        final ListNode c = new ListNode(5);
+        final ListNode d = new ListNode(7);
+        final ListNode e = new ListNode(9);
+        a.next = b;
+        b.next = c;
+        c.next = d;
+        d.next = e;
+
+        final ListNode f = new ListNode(2);
+        final ListNode g = new ListNode(4);
+        final ListNode h = new ListNode(6);
+        f.next = g;
+        g.next = h;
+        h.next = c;
+
+        assertEquals(getIntersectionNode(a, f), c);
+    }
+
+    public static boolean hasPathSum(TreeNode root, int sum) {
+        return findPathSum(root, 0, sum);
+    }
+    private static boolean findPathSum(TreeNode node, int acc, int target) {
+        if(node == null) return false;
+        acc += node.val;
+        //if(target < acc) return false; //node.val could be negative
+        if(node.left == null && node.right == null) {
+            return acc == target;
+        } else {
+            if(node.left != null) {
+                if(findPathSum(node.left, acc, target)) return true;
+            } 
+            if(node.right != null) {
+                if(findPathSum(node.right, acc, target)) return true;
+            }
+            return false;
+        }
+    }
+
+    public static void testHasPathSum() {
+        TreeNode n5 = new TreeNode(5);
+        TreeNode n4 = new TreeNode(4);
+        TreeNode n8 = new TreeNode(8);
+        n5.left = n4;
+        n5.right = n8;
+
+        TreeNode n11 = new TreeNode(11);
+        n4.left = n11;
+        TreeNode n7 = new TreeNode(7);
+        TreeNode n2 = new TreeNode(2);
+        n11.left = n7;
+        n11.right = n2;
+        TreeNode n13 = new TreeNode(13);
+        TreeNode n4_ = new TreeNode(4);
+        n8.left = n13;
+        n8.right = n4_;
+        TreeNode n1 = new TreeNode(1);
+        n4_.right = n1;
+        System.out.println(n5);
+
+        assertEquals(hasPathSum(n5, 22), true);
+        assertEquals(hasPathSum(n5, 27), true);
+        assertEquals(hasPathSum(n5, 26), true);
+        assertEquals(hasPathSum(n5, 18), true);
+        assertEquals(hasPathSum(n5, 19), false);
+        assertEquals(hasPathSum(n5, 0), false);
+        assertEquals(hasPathSum(n5, 1), false);
+        assertEquals(hasPathSum(null, 1), false);
+
+
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -873,5 +975,7 @@ public class Solution {
         testMajorityElement();
         testConvertToTitle();
         testCompareVersion();
+        testGetintersectionNode();
+        testHasPathSum();
     }
 }
