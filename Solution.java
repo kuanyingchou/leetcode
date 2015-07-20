@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Stack;
 
 public class Solution {
     //utilities
@@ -1070,6 +1071,64 @@ public class Solution {
         assertEquals(isPalindrome2(c), false);
     }
 
+    static class MyQueue {
+        private Stack<Integer> stack = new Stack<Integer>();
+        // Push element x to the back of queue.
+        public void push(int x) {
+            stack.push(x);
+        }
+
+        // Removes the element from in front of queue.
+        public void pop() {
+            Stack<Integer> t = dump();
+            t.pop();
+            fill(t);
+        }
+
+        private Stack<Integer> dump() {
+            Stack<Integer> t = new Stack<Integer>();
+            while(!stack.empty()) {
+                t.push(stack.peek());
+                stack.pop();
+            }
+            return t;
+        }
+        private void fill(Stack<Integer> t) {
+            while(!t.empty()) {
+                stack.push(t.peek());
+                t.pop();
+            }
+        }
+
+        // Get the front element.
+        public int peek() {
+            Stack<Integer> t = dump();
+            int r = t.peek();
+            fill(t);
+            return r;
+        }
+
+        // Return whether the queue is empty.
+        public boolean empty() {
+            return stack.empty();
+        }
+    }
+    public static void testStackQueue() {
+        final MyQueue q = new MyQueue();
+        q.push(3);
+        q.push(5);
+        q.push(7);
+        assertEquals(q.peek(), 3);
+        assertEquals(q.peek(), 3);
+        q.pop();
+        assertEquals(q.peek(), 5);
+        assertEquals(q.peek(), 5);
+        assertEquals(q.empty(), false);
+        q.pop();
+        q.pop();
+        assertEquals(q.empty(), true);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -1097,5 +1156,6 @@ public class Solution {
         testHasPathSum();
         testLowestCommonAncestor();
         testIsPalindrome();
+        testStackQueue();
     }
 }
