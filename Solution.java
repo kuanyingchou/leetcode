@@ -78,7 +78,15 @@ public class Solution {
         int val;
         TreeNode left;
         TreeNode right;
-        TreeNode(int x) { val = x; }
+        TreeNode(int x) {
+            this(x, null, null);
+        }
+        TreeNode(int x, TreeNode l, TreeNode r) {
+            val = x;
+            left = l;
+            right = r;
+        }
+
         public String toString() {
             return val + "("+ (left!=null?left:"") +", "+(right!=null?right:"")+")";
         }
@@ -904,6 +912,7 @@ public class Solution {
     }
     private static boolean findPathSum(TreeNode node, int acc, int target) {
         if(node == null) return false;
+        //System.out.println("visiting "+node);
         acc += node.val;
         //if(target < acc) return false; //node.val could be negative
         if(node.left == null && node.right == null) {
@@ -949,7 +958,56 @@ public class Solution {
         assertEquals(hasPathSum(n5, 1), false);
         assertEquals(hasPathSum(null, 1), false);
 
+    }
 
+    public static TreeNode lowestCommonAncestor(
+            TreeNode root, TreeNode p, TreeNode q) {
+        if(isDescendant(p, root) && isDescendant(q, root)) {
+            if(isDescendant(p, root.left) && isDescendant(q, root.left)) {
+                return lowestCommonAncestor(root.left, p, q);
+            } else if(isDescendant(p, root.right) && isDescendant(q, root.right)) {
+                return lowestCommonAncestor(root.right, p, q);
+            } else {
+                return root;
+            }
+        } else {
+            return null;
+        }
+        
+    }
+    private static boolean isDescendant(TreeNode a, TreeNode b) {
+        if(a == null || b == null) return false;
+
+        if(a == b) return true;
+        if(a == b.left) return true;
+        if(a == b.right) return true;
+
+        if(b.left != null) {
+            if(isDescendant(a, b.left)) {
+                return true;
+            }
+        }
+        if(b.right != null) {
+            if(isDescendant(a, b.right)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static void testLowestCommonAncestor() {
+        TreeNode n2, n4, n8;
+        TreeNode root = new TreeNode(6, 
+            n2 = new TreeNode(2, 
+                new TreeNode(0), 
+                    n4 = new TreeNode(4, 
+                        new TreeNode(3),
+                        new TreeNode(5))),
+            n8 = new TreeNode(8,
+                new TreeNode(7),
+                new TreeNode(9)));
+        assertEquals(lowestCommonAncestor(root, n2, n8), root);
+        assertEquals(lowestCommonAncestor(root, n2, n4), n2);
+        assertEquals(lowestCommonAncestor(root, n8, n8), n8);
     }
 
     public static void main(String[] args) {
@@ -977,5 +1035,7 @@ public class Solution {
         testCompareVersion();
         testGetintersectionNode();
         testHasPathSum();
+        testLowestCommonAncestor();
+
     }
 }
