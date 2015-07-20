@@ -222,7 +222,11 @@ public class Solution {
     public static class ListNode {
         int val;
         public ListNode next;
-        public ListNode(int x) { val = x; }
+        public ListNode(int x) { this(x, null); }
+        public ListNode(int x, ListNode n) { 
+            val = x; 
+            next = n;
+        }
 
         public void append(int x) {
             ListNode i = null;
@@ -1009,6 +1013,62 @@ public class Solution {
         assertEquals(lowestCommonAncestor(root, n2, n4), n2);
         assertEquals(lowestCommonAncestor(root, n8, n8), n8);
     }
+    public static boolean isPalindrome1(ListNode head) {
+        ListNode newHead = null;
+        for(ListNode p = head; p!=null; p = p.next) {
+            //System.out.println(p.val);
+            newHead = new ListNode(p.val, newHead);
+        }
+        for(ListNode p = head, q = newHead; p!=null; p = p.next, q = q.next) {
+            if(p.val != q.val) { return false; }
+        }
+        return true;
+    }
+    public static boolean isPalindrome2(ListNode head) {
+        int count = countLinkedList(head);
+        if(count == 1) return true;
+        if(count % 2 != 0) count++;
+        ListNode mid = getListNodeAt(head, count/2);
+        ListNode tail = reverseLinkedList(mid);
+        for(ListNode p=tail, q=head; p!=null; p=p.next, q=q.next) {
+            if(p.val != q.val) return false;
+        }
+        return true;
+    }
+    private static int countLinkedList(ListNode head) {
+        int count = 0;
+        for(ListNode p = head; p!=null; p = p.next) {
+            count++;
+        }
+        return count;
+    }
+    private static ListNode getListNodeAt(ListNode head, int index) {
+        for(ListNode p = head; p!=null; p = p.next, index--) {
+            if(index == 0) return p;
+        }
+        return null;
+    }
+    private static ListNode reverseLinkedList(ListNode head) {
+        ListNode curr = head;
+        ListNode prev = null;
+        while(curr != null) {
+            ListNode t = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = t;
+        }
+        return prev;
+    }
+    public static void testIsPalindrome() {
+        ListNode a = new ListNode(1, new ListNode(2, new ListNode(1)));
+        assertEquals(isPalindrome2(a), true);
+
+        ListNode b = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(2, new ListNode(1)))));
+        assertEquals(isPalindrome2(b), true);
+
+        ListNode c = new ListNode(1, new ListNode(2, new ListNode(3)));
+        assertEquals(isPalindrome2(c), false);
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -1036,6 +1096,6 @@ public class Solution {
         testGetintersectionNode();
         testHasPathSum();
         testLowestCommonAncestor();
-
+        testIsPalindrome();
     }
 }
