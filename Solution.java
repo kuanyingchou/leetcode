@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Stack;
+import java.util.ArrayDeque;
 
 public class Solution {
     //utilities
@@ -1213,6 +1214,61 @@ public class Solution {
         assertEquals(myAtoi(String.valueOf(Integer.MIN_VALUE)), -2147483648);
     }
 
+    static class MyStack {
+        private Queue<Integer> queue = new ArrayDeque<Integer>();
+
+        // Push element x onto stack.
+        public void push(int x) {
+            queue.add(x);
+        }
+
+        // Removes the element on top of the stack.
+        public void pop() {
+            Queue<Integer> t = new ArrayDeque<Integer>(); 
+            while(queue.size()>1) {
+                t.add(queue.poll());
+            }
+            queue.poll(); //bye bye
+            while(!t.isEmpty()) {
+                queue.add(t.poll());
+            }
+        }
+
+        // Get the top element.
+        public int top() {
+            Queue<Integer> t = new ArrayDeque<Integer>(); 
+            while(queue.size()>1) {
+                t.add(queue.poll());
+            }
+            int res = queue.peek();
+            t.add(queue.poll());
+            while(!t.isEmpty()) {
+                queue.add(t.poll());
+            }
+            return res;
+        }
+
+        // Return whether the stack is empty.
+        public boolean empty() {
+            return queue.isEmpty();
+        }
+    }
+    public static void testMyStack() {
+        MyStack stack = new MyStack();
+        assertEquals(stack.empty(), true);
+        stack.push(3);
+        stack.push(5);
+        stack.push(7);
+        assertEquals(stack.top(), 7);
+        stack.pop();
+        assertEquals(stack.top(), 5);
+        stack.pop();
+        assertEquals(stack.top(), 3);
+        stack.pop();
+        assertEquals(stack.empty(), true);
+
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -1243,6 +1299,7 @@ public class Solution {
         testStackQueue();
         testIsPowerOfTwo();
         testMyAtoi();
+        testMyStack();
 
     }
 }
