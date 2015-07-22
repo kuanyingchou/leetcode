@@ -1128,6 +1128,90 @@ public class Solution {
         q.pop();
         assertEquals(q.empty(), true);
     }
+    public static boolean isPowerOfTwo(int n) {
+        if(n == 1) return true;
+        int sum = 0;
+        while(n > 0) {
+            sum += n & 1;
+            n >>= 1;
+        }
+        return sum == 1;
+    }
+    public static void testIsPowerOfTwo() {
+        assertEquals(isPowerOfTwo(1), true);
+        assertEquals(isPowerOfTwo(2), true);
+        assertEquals(isPowerOfTwo(4), true);
+        assertEquals(isPowerOfTwo(8), true);
+
+        assertEquals(isPowerOfTwo(3), false);
+        assertEquals(isPowerOfTwo(5), false);
+        assertEquals(isPowerOfTwo(12), false);
+    }
+
+    public static int myAtoi(String str) {
+        if(str == null || str.isEmpty()) return 0;
+        str = str.trim();
+        int start = 0;
+
+        boolean positive = true;
+        char firstChar = str.charAt(start);
+        if(firstChar == '-') {
+            positive = false;
+            start++;
+        } else if(firstChar == '+') {
+            start++;
+        }
+
+        int end = str.length()-1;
+        while(end>=start && !Character.isDigit(str.charAt(end))) {
+            end--;
+        }
+
+        long val = 0;
+        //System.out.println("start...");
+        for(int i=start; i<=end; i++) {
+            if(!Character.isDigit(str.charAt(i))) {
+                break;
+            }
+            val *= 10;
+            val += Character.digit(str.charAt(i), 10);
+            if(positive) {
+                if(val > Integer.MAX_VALUE) {
+                    return Integer.MAX_VALUE;
+                }
+            } else {
+                if(-val < Integer.MIN_VALUE) {
+                    return Integer.MIN_VALUE;
+                }
+            }
+            //System.out.println("char: "+str.charAt(i)+" val: "+val);
+        }
+        if(positive) {
+            return (int)val;
+        } else {
+            return (int)(-val);
+        }
+    }
+    public static void testMyAtoi() {
+        assertEquals(myAtoi("0"), 0);
+        assertEquals(myAtoi("1"), 1);
+        assertEquals(myAtoi("123"), 123);
+        assertEquals(myAtoi("+123"), 123);
+        assertEquals(myAtoi("-123"), -123);
+        assertEquals(myAtoi("123abc"), 123);
+        assertEquals(myAtoi("123412341234123412341234"), Integer.MAX_VALUE);
+        assertEquals(myAtoi("-123412341234123412341234"), Integer.MIN_VALUE);
+        assertEquals(myAtoi(null), 0);
+        assertEquals(myAtoi(""), 0);
+        assertEquals(myAtoi("+"), 0);
+        assertEquals(myAtoi("-"), 0);
+        assertEquals(myAtoi("-"), 0);
+        assertEquals(myAtoi("+-2"), 0);
+        assertEquals(myAtoi("  -0012a42"), -12);
+        assertEquals(myAtoi("9223372036854775809"), 2147483647);
+        assertEquals(myAtoi(String.valueOf(Integer.MAX_VALUE)), 2147483647);
+        assertEquals(myAtoi(String.valueOf(Integer.MIN_VALUE)), -2147483648);
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -1157,5 +1241,8 @@ public class Solution {
         testLowestCommonAncestor();
         testIsPalindrome();
         testStackQueue();
+        testIsPowerOfTwo();
+        testMyAtoi();
+
     }
 }
