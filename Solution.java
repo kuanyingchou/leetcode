@@ -1312,6 +1312,31 @@ public class Solution {
         assertEquals(convert("PAYPALISHIRING", 1), "PAYPALISHIRING");
         assertEquals(convert("PAYPALISHIRING", 3), "PAHNAPLSIIGYIR");
     }
+    public static int reverse(int x) {
+        boolean isPositive = true;
+        if(x<0) {
+            x = -x;
+            isPositive = false;
+        }
+        long res = 0;
+        while(x > 0) {
+            res = res * 10 + x % 10;
+            x /= 10;
+        }
+        if(!isPositive) {
+            res = -res;
+        }
+        if(res > Integer.MAX_VALUE || res < Integer.MIN_VALUE) return 0;
+        return (int)res;
+    }
+    private static void testReverse() {
+        assertEquals(reverse(0), 0);
+        assertEquals(reverse(1), 1);
+        assertEquals(reverse(-1), -1);
+        assertEquals(reverse(123), 321);
+        assertEquals(reverse(-123), -321);
+        assertEquals(reverse(1534236469), 0);
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -1345,5 +1370,6 @@ public class Solution {
         testMyAtoi();
         testMyStack();
         testConvert();
+        testReverse();
     }
 }
