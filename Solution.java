@@ -1269,6 +1269,50 @@ public class Solution {
 
     }
 
+    //ZigZag
+    public static String convert(String s, int numRows) {
+        final List<StringBuilder> rows = new ArrayList<>();
+        for(int i=0; i<numRows; i++) {
+            rows.add(new StringBuilder());
+        }
+        int index = 0;
+        int rowIndex = 0;
+        int rowStep = 1;
+        while(index < s.length()) {
+            final StringBuilder r = rows.get(rowIndex);
+            //System.out.println("rowIndex: "+rowIndex+" step: "+rowStep);
+            r.append(s.charAt(index++));
+            rowStep = checkZigzagStep(rowIndex, rowStep, numRows);
+            rowIndex += rowStep;
+        }
+        final StringBuilder res = new StringBuilder();
+        for(int i=0; i<numRows; i++) {
+            res.append(rows.get(i));
+        }
+
+        return res.toString();
+    }
+    private static int checkZigzagStep(int index, int step, int numRows) {
+        if(numRows == 1) return index;
+        if(step > 0) {
+            if(index == numRows - 1) {
+                step = -1;
+            }
+        } else {
+            if(index == 0) {
+                step = 1;
+            }
+        }
+        return step;
+    }
+    private static void testConvert() {
+        assertEquals(convert("ABCDE", 4), "ABCED");
+        assertEquals(convert("ABCDE", 2), "ACEBD");
+        assertEquals(convert("ABCD", 2), "ACBD");
+        assertEquals(convert("PAYPALISHIRING", 1), "PAYPALISHIRING");
+        assertEquals(convert("PAYPALISHIRING", 3), "PAHNAPLSIIGYIR");
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -1300,6 +1344,6 @@ public class Solution {
         testIsPowerOfTwo();
         testMyAtoi();
         testMyStack();
-
+        testConvert();
     }
 }
