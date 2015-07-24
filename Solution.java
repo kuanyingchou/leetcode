@@ -1338,6 +1338,28 @@ public class Solution {
         assertEquals(reverse(1534236469), 0);
     }
 
+    public static void deleteNode(ListNode node) {
+        if(node == null) return;
+        if(node.next == null) return;
+        ListNode curr = node;
+        ListNode prev = null;
+        while(curr.next!=null) {
+            curr.val = curr.next.val;
+            prev = curr;
+            curr = curr.next;
+        }
+        prev.next = null;
+    }
+    private static void testDeleteNode() {
+        ListNode n = new ListNode(1);
+        ListNode m = new ListNode(2, new ListNode(3, new ListNode(4)));
+
+        n.next = m;
+        System.out.println(n);
+        deleteNode(m);
+        System.out.println(n);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -1371,5 +1393,6 @@ public class Solution {
         testMyStack();
         testConvert();
         testReverse();
+        testDeleteNode();
     }
 }
