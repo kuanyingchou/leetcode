@@ -1359,6 +1359,43 @@ public class Solution {
         deleteNode(m);
         System.out.println(n);
     }
+    public static boolean isPalindromeInt(int x) {
+        //long lx = x;
+        if(x < 0) {
+            return false;
+            /*
+            lx = -lx;
+            if(lx > Integer.MAX_VALUE) return false;
+            */
+        }
+        int t = x;
+        int d = 1;
+        while(t >= 10) {
+            t /= 10;
+            d *= 10;
+        }
+        if(d == 1) return true;
+
+        t = x;
+        while(t>0) {
+            int left = x / d % 10;
+            int right = t % 10;
+            t /= 10;
+            d /= 10;
+            if(left != right) return false;
+        }
+
+        return true;
+    }
+    private static void testIsPalindromeInt() {
+        assertEquals(isPalindromeInt(1), true);
+        assertEquals(isPalindromeInt(121), true);
+        assertEquals(isPalindromeInt(12321), true);
+        assertEquals(isPalindromeInt(12322), false);
+        assertEquals(isPalindromeInt(-2147483648), false);
+        assertEquals(isPalindromeInt(-2147447412), false); //leetcode testcase
+        
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -1394,5 +1431,6 @@ public class Solution {
         testConvert();
         testReverse();
         testDeleteNode();
+        testIsPalindromeInt();
     }
 }
