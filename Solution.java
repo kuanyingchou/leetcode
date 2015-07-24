@@ -1397,6 +1397,70 @@ public class Solution {
         
     }
 
+    static class MinStack {
+        private static int CAPACITY = 10;
+        private int[] data = new int[CAPACITY];
+        private int size = 0;
+        private Stack<Integer> mins = new Stack<>();
+
+        public void push(int x) {
+            if(size == data.length) {
+                enlarge();
+            }
+            data[size++] = x;
+            if(mins.size() == 0 || x <= mins.peek()) {
+                mins.push(x);
+            }
+        }
+        public int size() { return size; }
+
+        public void pop() {
+            size--;
+            if(data[size] == mins.peek()) mins.pop();
+        }
+
+        public int top() {
+            return data[size-1];
+        }
+
+        public int getMin() {
+            return mins.peek();
+        }
+
+        private void enlarge() {
+            int[] newData = new int[data.length * 2]; //too aggressive?
+            for(int i=0; i<data.length; i++) {
+                newData[i] = data[i];
+            }
+            data = newData;
+        }
+    }
+    private static void testMinStack() {
+        MinStack stack = new MinStack();
+        stack.push(3);
+        stack.push(5);
+        stack.push(7);
+        stack.pop();
+        assertEquals(stack.top(), 5);
+        stack.push(7);
+        assertEquals(stack.top(), 7);
+        assertEquals(stack.getMin(), 3);
+
+        MinStack s2 = new MinStack();
+        s2.push(2);
+        s2.push(0);
+        s2.push(3);
+        s2.push(0);
+        assertEquals(s2.getMin(), 0);
+        s2.pop();
+        assertEquals(s2.getMin(), 0);
+        s2.pop();
+        assertEquals(s2.getMin(), 0);
+        s2.pop();
+        assertEquals(s2.getMin(), 2);
+    }
+        
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -1432,5 +1496,6 @@ public class Solution {
         testReverse();
         testDeleteNode();
         testIsPalindromeInt();
+        testMinStack();
     }
 }
