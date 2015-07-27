@@ -1459,6 +1459,97 @@ public class Solution {
         s2.pop();
         assertEquals(s2.getMin(), 2);
     }
+
+    public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if(l1 == null) return l2;
+        ListNode to = l1;
+        ListNode toPrev = null;
+        ListNode from = l2;
+        while(from != null) {
+            boolean found = false;
+            while(to != null) {
+                if(to.val >= from.val) {
+                    if(toPrev == null) {
+                        ListNode fn = from.next;
+                        from.next = to;
+                        l1 = from;
+                        toPrev = from;
+                        from = fn;
+                    } else {
+                        ListNode fn = from.next;
+                        from.next = to;
+                        toPrev.next = from;
+                        toPrev = from;
+                        from = fn;
+                    }
+                    found = true;
+                    break;
+                } else {
+                    toPrev = to;
+                    to = to.next;
+                }
+            }
+            if(!found) {
+                toPrev.next = from;
+                break;
+            }
+        }
+        return l1;
+    }
+    private static void testMergeTwoLists() {
+        ListNode l1 = new ListNode(3, new ListNode(5, new ListNode(7)));
+        ListNode l2 = new ListNode(2, new ListNode(4, new ListNode(6)));
+        assertEquals(mergeTwoLists(l1, l2).toString(), 
+                new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5,
+                                new ListNode(6, new ListNode(7)))))).toString());
+        assertEquals(mergeTwoLists(l1, null).toString(), l1.toString());
+        assertEquals(mergeTwoLists(null, l2).toString(), l2.toString());
+        assertEquals(mergeTwoLists(null, null), null);
+
+        ListNode l3 = new ListNode(1, new ListNode(2, new ListNode(3)));
+        ListNode l4 = new ListNode(4, new ListNode(5, new ListNode(6)));
+        assertEquals(mergeTwoLists(l3, l4).toString(), 
+                new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4,
+                                new ListNode(5, new ListNode(6)))))).toString());
+        ListNode l5 = new ListNode(4, new ListNode(5, new ListNode(6)));
+        ListNode l6 = new ListNode(1, new ListNode(2, new ListNode(3)));
+        assertEquals(mergeTwoLists(l5, l6).toString(), 
+                new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4,
+                                new ListNode(5, new ListNode(6)))))).toString());
+    }
+
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        if(head == null) return null;
+        ListNode l = head;
+        while(n>0 && l!=null) {
+            l = l.next;
+            n--;
+        }
+        if(n>0) return head;
+        ListNode f = head; ListNode fp = null;
+        while(l!=null) {
+            l = l.next;
+            fp = f;
+            f = f.next;
+        }
+        if(fp==null) {
+            head = head.next;
+        } else {
+            fp.next = f.next;
+        }
+        return head;
+    }
+    private static void testRemoveNthFromEnd() {
+        ListNode l1 = new ListNode(1, new ListNode(2, new ListNode(3)));
+        assertEquals(removeNthFromEnd(l1, 2).toString(), 
+                new ListNode(1, new ListNode(3)).toString());
+        ListNode l2 = new ListNode(1);
+        assertEquals(removeNthFromEnd(l2, 2).toString(), 
+                new ListNode(1).toString());
+        ListNode l3 = new ListNode(1);
+        assertEquals(removeNthFromEnd(l3, 1), null);
+
+    }
         
 
     public static void main(String[] args) {
@@ -1497,5 +1588,7 @@ public class Solution {
         testDeleteNode();
         testIsPalindromeInt();
         testMinStack();
+        testMergeTwoLists();
+        testRemoveNthFromEnd();
     }
 }
