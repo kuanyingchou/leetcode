@@ -1660,6 +1660,31 @@ public class Solution {
         assertEquals(removeDuplicates(a=new int[0]), 0);
         assertEquals(removeDuplicates(null), 0);
     }
+    public static int lengthOfLastWord(String s) {
+        if(s==null || s.length() == 0) return 0;
+        int i = s.length()-1;
+        int count = 0;
+        while(i>=0) {
+            if(Character.isAlphabetic(s.charAt(i))) {
+                count++;
+            } else {
+                if(count!=0) {
+                    break;
+                } 
+            }
+            i--;
+        }
+        return count;
+
+    }
+    private static void testLengthOfLastWord() {
+        assertEquals(lengthOfLastWord("Hello World"), 5);
+        assertEquals(lengthOfLastWord("Hello"), 5);
+        assertEquals(lengthOfLastWord(""), 0);
+        assertEquals(lengthOfLastWord(null), 0);
+        assertEquals(lengthOfLastWord("Hello World  "), 5);
+        assertEquals(lengthOfLastWord("  "), 0);
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -1702,5 +1727,6 @@ public class Solution {
         testIsPalindromeStr();
         testIsParenthesesValid();
         testRemoveDuplicates();
+        testLengthOfLastWord();
     }
 }
