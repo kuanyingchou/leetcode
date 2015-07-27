@@ -1550,6 +1550,42 @@ public class Solution {
         assertEquals(removeNthFromEnd(l3, 1), null);
 
     }
+
+    public static boolean isPalindromeStr(String s) {
+        if(s == null || s.length() <=1) return true;
+        int i = find(0, s, +1);
+        int j = find(s.length()-1, s, -1);
+        while(i<j) {
+            if(Character.toLowerCase(s.charAt(i)) != 
+                    Character.toLowerCase(s.charAt(j))) 
+                return false;
+            i = find(i+1, s, +1);
+            j = find(j-1, s, -1);
+        }
+        return true;
+    }
+    private static int find(int index, String s, int step) {
+        int i = index;
+        while(i>=0 && i<s.length()) {
+            if(Character.isAlphabetic(s.charAt(i)) ||
+                    Character.isDigit(s.charAt(i)))
+                return i;
+            i += step;
+        }
+        return i; //invalid
+    }
+    private static void testIsPalindromeStr() {
+        assertEquals(isPalindromeStr(null), true);
+        assertEquals(isPalindromeStr(""), true);
+        assertEquals(isPalindromeStr("a"), true);
+        assertEquals(isPalindromeStr("ab"), false);
+        assertEquals(isPalindromeStr("aa"), true);
+        assertEquals(isPalindromeStr("aba"), true);
+        assertEquals(isPalindromeStr("abba"), true);
+        assertEquals(isPalindromeStr(",,aa"), true);
+        assertEquals(isPalindromeStr(",,a,,,"), true);
+        assertEquals(isPalindromeStr("aA"), true);
+    }
         
 
     public static void main(String[] args) {
@@ -1590,5 +1626,6 @@ public class Solution {
         testMinStack();
         testMergeTwoLists();
         testRemoveNthFromEnd();
+        testIsPalindromeStr();
     }
 }
