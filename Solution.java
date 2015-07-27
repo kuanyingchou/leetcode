@@ -1686,6 +1686,29 @@ public class Solution {
         assertEquals(lengthOfLastWord("  "), 0);
     }
 
+    public static List<Integer> getRow(int rowIndex) {
+        List<Integer> res = new ArrayList<>();
+        res.add(1);
+        while(rowIndex > 0) {
+            int i = 0;
+            List<Integer> r = new ArrayList<>();
+            r.add(1);
+            while(i < res.size()) {
+                int n = i+1 == res.size() ? 0 : res.get(i+1);
+                r.add(res.get(i) + n);
+                i++;
+            }
+            res = r;
+            rowIndex--;
+        }
+        return res;
+    }
+    private static void testGetRow() {
+        for(int i=0; i<10; i++) {
+            System.out.println(getRow(i));
+        }
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -1728,5 +1751,6 @@ public class Solution {
         testIsParenthesesValid();
         testRemoveDuplicates();
         testLengthOfLastWord();
+        testGetRow();
     }
 }
