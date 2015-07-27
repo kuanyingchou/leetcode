@@ -1574,6 +1574,50 @@ public class Solution {
         }
         return i; //invalid
     }
+
+    public static boolean isParenthesesValid(String s) {
+        if(s == null) return true;
+        Stack<Character> stack = new Stack<>();
+        int i = 0;
+        while(i<s.length()) {
+            char c = s.charAt(i);
+            if("([{".indexOf(c) >= 0) {
+                stack.push(c);
+            } else if(")]}".indexOf(c) >= 0) {
+                if(stack.isEmpty()) return false;
+                char p = stack.peek();
+                switch(c) {
+                    case ')': if(p == '(') stack.pop();
+                              else return false;
+                              break;
+                    case ']': if(p == '[') stack.pop();
+                              else return false;
+                              break;
+                    case '}': if(p == '{') stack.pop();
+                              else return false;
+                              break;
+                }
+            }
+            i++;
+        }
+        if(stack.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private static void testIsParenthesesValid() {
+        assertEquals(isParenthesesValid(null), true);
+        assertEquals(isParenthesesValid(""), true);
+        assertEquals(isParenthesesValid("()"), true);
+        assertEquals(isParenthesesValid("(())"), true);
+        assertEquals(isParenthesesValid("()()"), true);
+        assertEquals(isParenthesesValid("([{}])"), true);
+        assertEquals(isParenthesesValid("("), false);
+        assertEquals(isParenthesesValid("(]"), false);
+        assertEquals(isParenthesesValid("((("), false);
+    }
+
     private static void testIsPalindromeStr() {
         assertEquals(isPalindromeStr(null), true);
         assertEquals(isPalindromeStr(""), true);
@@ -1627,5 +1671,6 @@ public class Solution {
         testMergeTwoLists();
         testRemoveNthFromEnd();
         testIsPalindromeStr();
+        testIsParenthesesValid();
     }
 }
