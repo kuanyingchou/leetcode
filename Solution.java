@@ -1574,6 +1574,19 @@ public class Solution {
         }
         return i; //invalid
     }
+    private static void testIsPalindromeStr() {
+        assertEquals(isPalindromeStr(null), true);
+        assertEquals(isPalindromeStr(""), true);
+        assertEquals(isPalindromeStr("a"), true);
+        assertEquals(isPalindromeStr("ab"), false);
+        assertEquals(isPalindromeStr("aa"), true);
+        assertEquals(isPalindromeStr("aba"), true);
+        assertEquals(isPalindromeStr("abba"), true);
+        assertEquals(isPalindromeStr(",,aa"), true);
+        assertEquals(isPalindromeStr(",,a,,,"), true);
+        assertEquals(isPalindromeStr("aA"), true);
+    }
+        
 
     public static boolean isParenthesesValid(String s) {
         if(s == null) return true;
@@ -1618,19 +1631,35 @@ public class Solution {
         assertEquals(isParenthesesValid("((("), false);
     }
 
-    private static void testIsPalindromeStr() {
-        assertEquals(isPalindromeStr(null), true);
-        assertEquals(isPalindromeStr(""), true);
-        assertEquals(isPalindromeStr("a"), true);
-        assertEquals(isPalindromeStr("ab"), false);
-        assertEquals(isPalindromeStr("aa"), true);
-        assertEquals(isPalindromeStr("aba"), true);
-        assertEquals(isPalindromeStr("abba"), true);
-        assertEquals(isPalindromeStr(",,aa"), true);
-        assertEquals(isPalindromeStr(",,a,,,"), true);
-        assertEquals(isPalindromeStr("aA"), true);
+    public static int removeDuplicates(int[] nums) {
+        if(nums == null) return 0;
+        if(nums.length <= 1) return nums.length;
+        int nodup = 0;
+        int i = 1;
+        while(i<nums.length) {
+            if(nums[i] != nums[nodup]) {
+                if(i>nodup+1) {
+                    nums[nodup+1] = nums[i];
+                }
+                nodup++;
+            }
+            i++;
+        }
+        return nodup+1;
     }
-        
+    private static void testRemoveDuplicates() {
+        int[] a=null;
+        assertEquals(removeDuplicates(a=new int[] {1, 1, 2}), 2);
+        System.out.println(Arrays.toString(a));
+        assertEquals(removeDuplicates(a=new int[] {1, 2, 3}), 3);
+        System.out.println(Arrays.toString(a));
+        assertEquals(removeDuplicates(a=new int[] {1, 1, 1}), 1);
+        System.out.println(Arrays.toString(a));
+        assertEquals(removeDuplicates(a=new int[] {1, 1, 1, 2}), 2);
+        System.out.println(Arrays.toString(a));
+        assertEquals(removeDuplicates(a=new int[0]), 0);
+        assertEquals(removeDuplicates(null), 0);
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -1672,5 +1701,6 @@ public class Solution {
         testRemoveNthFromEnd();
         testIsPalindromeStr();
         testIsParenthesesValid();
+        testRemoveDuplicates();
     }
 }
