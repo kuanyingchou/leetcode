@@ -487,6 +487,7 @@ public class Solution {
             leaves.addAll(toBeAdded); 
             toBeAdded.ensureCapacity(toBeAdded.size());
             toBeAdded.clear();
+
             //System.out.println(i+": leaf size: "+leaves.size());
             int max = -1;
             for(int j=leaves.size()-1; j>=0; j--) {
@@ -520,6 +521,10 @@ public class Solution {
         assertEquals(rob(new int[] {0, 0}), 0);
         assertEquals(rob(new int[] {1, 1}), 1);
         assertEquals(rob(new int[] {3, 5, 1, 2, 4}), 9);
+        assertEquals(rob(new int[] {1, 0, 0, 1, 9}), 10);
+        assertEquals(rob(new int[] {1, 0, 0, 0, 1, 9}), 10);
+        assertEquals(rob(new int[] {1, 0, 0, 0, 1}), 2);
+        assertEquals(rob(new int[] {1, 0, 0, 0, 1, 9, 99}), 101);
 
         //rob(new int[] {183,219,57,193,94,233,202,154,65,240,97,234,100,249,186,66,90});
         //rob(new int[] {183,219,57,193,94,233,202,154,65,240,97,234,100,249,186,66,90,238,168,128,177,235,50,81,185,165,217,207,88,80,112,78,135,62,228,247,211});
@@ -1709,6 +1714,129 @@ public class Solution {
         }
     }
 
+
+    public static int robImpl2(int[] nums) {
+        List<RobDecision> decisions = new ArrayList<>();
+        decisions.add(new RobDecision(0, 1));
+        int i=0;
+        while(i<nums.length) {
+            int v = nums[i];
+            int j = 0;
+            int planSize = decisions.size();
+            while(j < planSize) {
+                RobDecision p = decisions.get(j);
+                if(p != null) {
+                    int av = p.val;
+                    if(p.pass >= 3) {
+                        decisions.set(j, null);
+                    } else {
+                        if(p.pass > 0) {
+                            decisions.add(new RobDecision(av+v, 0));
+                        }
+                        p.pass++;
+                    }
+                }
+                j++;
+            }
+            i++;
+        }
+        int max = Integer.MIN_VALUE;
+        for(RobDecision p : decisions) {
+            if(p!=null && p.val > max) {
+                max = p.val;
+            }
+        }
+        return max;
+    }
+    static class RobDecision {
+        int val;
+        int pass;
+        public RobDecision(int v, int p) { 
+            val = v;
+            pass = p;
+        }
+    }
+
+    public static List<List<Integer>> pathSum(TreeNode root, int sum) {
+        if(root == null) return new ArrayList<List<Integer>>();
+        Stack<RNode> rnodes = new Stack<>();
+        rnodes.add(new RNode(root, null));
+        boolean hasChildren;
+        do {
+            hasChildren = false;
+            Stack<RNode> t = new Stack<>();
+            while(!rnodes.isEmpty()) {
+                RNode rn = rnodes.pop();
+                if(rn.hasChildren()) {
+                    if(rn.node.left != null) {
+                        t.push(new RNode(rn.node.left, rn));
+                    }
+                    if(rn.node.right != null) {
+                        t.push(new RNode(rn.node.right, rn));
+                    }
+                    hasChildren = true;
+                } else {
+                    t.push(rn);
+                }
+            }
+            rnodes = t;
+        } while(hasChildren);
+        List<List<Integer>> res = new ArrayList<>();
+        while(!rnodes.isEmpty()) {
+            RNode n = rnodes.pop();
+            if(n.sum() == sum) res.add(n.toList());
+        }
+        return res;
+    }
+    private static class RNode {
+        RNode parent;
+        TreeNode node;
+        RNode(TreeNode n, RNode p) {
+            parent = p;
+            node = n;
+        }
+        int sum() {
+            int res = node.val;
+            RNode p = parent;
+            while(p!=null) {
+                res += p.node.val;
+                p = p.parent;
+            }
+            return res;
+        }
+        List<Integer> toList() {
+            List<Integer> res = new LinkedList<>();
+            res.add(node.val);
+            RNode p = parent;
+            while(p!=null) {
+                res.add(0, p.node.val);
+                p = p.parent;
+            }
+            return res;
+        }
+        boolean hasChildren() {
+            return node.left != null || node.right != null;
+        }
+    }
+    private static void testPathSum() {
+        TreeNode t1 = new TreeNode(5,
+                new TreeNode(4,
+                    new TreeNode(11,
+                        new TreeNode(7),
+                        new TreeNode(2)),
+                    null),
+                new TreeNode(8,
+                    new TreeNode(13),
+                    new TreeNode(4,
+                        new TreeNode(5),
+                        new TreeNode(1))));
+        List<List<Integer>> r = pathSum(t1, 22);
+        for(int i=0; i<r.size(); i++) {
+            System.out.println("path sum: "+r.get(i));
+        }
+    }
+
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -1752,5 +1880,6 @@ public class Solution {
         testRemoveDuplicates();
         testLengthOfLastWord();
         testGetRow();
+        testPathSum();
     }
 }
