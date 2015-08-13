@@ -517,19 +517,20 @@ public class Solution {
         }
     }
     public static void testRob() {
-        assertEquals(rob(new int[] {1}), 1);
-        assertEquals(rob(new int[] {0, 0}), 0);
-        assertEquals(rob(new int[] {1, 1}), 1);
-        assertEquals(rob(new int[] {3, 5, 1, 2, 4}), 9);
-        assertEquals(rob(new int[] {1, 0, 0, 1, 9}), 10);
-        assertEquals(rob(new int[] {1, 0, 0, 0, 1, 9}), 10);
-        assertEquals(rob(new int[] {1, 0, 0, 0, 1}), 2);
-        assertEquals(rob(new int[] {1, 0, 0, 0, 1, 9, 99}), 101);
+        assertEquals(rob2(new int[] {1}), 1);
+        assertEquals(rob2(new int[] {0, 0}), 0);
+        assertEquals(rob2(new int[] {1, 1}), 1);
+        assertEquals(rob2(new int[] {3, 5, 1, 2, 4}), 9);
+        assertEquals(rob2(new int[] {1, 0, 0, 1, 9}), 10);
+        assertEquals(rob2(new int[] {1, 0, 0, 0, 1, 9}), 10);
+        assertEquals(rob2(new int[] {1, 0, 0, 0, 1}), 2);
+        assertEquals(rob2(new int[] {1, 0, 0, 0, 1, 9, 99}), 101);
 
         //rob(new int[] {183,219,57,193,94,233,202,154,65,240,97,234,100,249,186,66,90});
         //rob(new int[] {183,219,57,193,94,233,202,154,65,240,97,234,100,249,186,66,90,238,168,128,177,235,50,81,185,165,217,207,88,80,112,78,135,62,228,247,211});
-        rob(new int[] {114,117,207,117,235,82,90,67,143,146,53,108,200,91,80,223,58,170,110,236,81,90,222,160,165,195,187,199,114,235,197,187,69,129,64,214,228,78,188,67,205,94,205,169,241,202,144,240});
-        rob(new int[] {155,44,52,58,250,225,109,118,211,73,137,96,137,89,174,66,134,26,25,205,239,85,146,73,55,6,122,196,128,50,61,230,94,208,46,243,105,81,157,89,205,78,249,203,238,239,217,212,241,242,157,79,133,66,36,165});
+
+        rob2(new int[] {114,117,207,117,235,82,90,67,143,146,53,108,200,91,80,223,58,170,110,236,81,90,222,160,165,195,187,199,114,235,197,187,69,129,64,214,228,78,188,67,205,94,205,169,241,202,144,240});
+        rob2(new int[] {155,44,52,58,250,225,109,118,211,73,137,96,137,89,174,66,134,26,25,205,239,85,146,73,55,6,122,196,128,50,61,230,94,208,46,243,105,81,157,89,205,78,249,203,238,239,217,212,241,242,157,79,133,66,36,165});
     }
 
     // you need to treat n as an unsigned value
@@ -1836,6 +1837,163 @@ public class Solution {
         }
     }
 
+    public static int minDepth(TreeNode root) {
+        if(root == null) return 0;
+        Stack<Digger> diggers = new Stack<>();
+        diggers.add(new Digger(root, 1));
+        boolean hasChildren = false;
+        do {
+            Stack<Digger> temp = new Stack<>();
+            while(!diggers.isEmpty()) {
+                Digger d = diggers.pop();
+                if(d.hasChildren()) {
+                    if(d.node.left != null) {
+                        temp.push(new Digger(d.node.left, d.depth+1));
+                    }
+                    if(d.node.right != null) {
+                        temp.push(new Digger(d.node.right, d.depth+1));
+                    }
+                    hasChildren = true;
+                } else {
+                    return d.depth;
+                }
+            }
+            diggers = temp;
+        } while(hasChildren);
+        throw new RuntimeException("what?");
+    }
+    private static class Digger {
+        TreeNode node;
+        int depth;
+        public Digger(TreeNode n, int d) {
+            node = n;
+            depth = d;
+        }
+        public boolean hasChildren() {
+            return node.left != null || node.right != null;
+        }
+    }
+    private static void testMinDepth() {
+        TreeNode t1 = new TreeNode(5,
+                new TreeNode(4,
+                    new TreeNode(11,
+                        new TreeNode(7),
+                        new TreeNode(2)),
+                    null),
+                new TreeNode(8,
+                    new TreeNode(13),
+                    new TreeNode(4,
+                        new TreeNode(5),
+                        new TreeNode(1))));
+        assertEquals(minDepth(t1), 3);
+        
+        TreeNode t2 = new TreeNode(1,
+                new TreeNode(2),
+                new TreeNode(3,
+                    new TreeNode(4),
+                    null));
+        assertEquals(minDepth(t2), 2);
+    }
+
+    public static boolean isBalanced(TreeNode root) {
+        if(root==null) return true;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while(!stack.isEmpty()) {
+            TreeNode n = stack.pop();
+            int left = getDepth(n.left);
+            int right = getDepth(n.right);
+            if(Math.abs(left-right)>1) return false;
+            if(n.left != null) stack.push(n.left);
+            if(n.right != null) stack.push(n.right);
+        }
+        return true;
+    }
+    private static int getDepth(TreeNode n) {
+        if(n==null) return 0;
+        Stack<Digger> stack = new Stack<Digger>();
+        List<Integer> depths = new ArrayList<>();
+        stack.push(new Digger(n, 1));
+        while(!stack.isEmpty()) {
+            Digger d = stack.pop();
+            if(d.hasChildren()) {
+                if(d.node.left != null) 
+                    stack.push(new Digger(d.node.left, d.depth+1));
+                if(d.node.right != null) 
+                    stack.push(new Digger(d.node.right, d.depth+1));
+            } else {
+                depths.add(d.depth);
+            }
+
+        }
+        int max = Integer.MIN_VALUE;
+        for(Integer i : depths) {
+            if(i>max) max = i;
+        }
+        return max;
+    }
+    private static void testIsBalanced() {
+        TreeNode t1 = new TreeNode(5,
+                new TreeNode(4,
+                    new TreeNode(11,
+                        new TreeNode(7),
+                        new TreeNode(2)),
+                    null),
+                new TreeNode(8,
+                    new TreeNode(13),
+                    new TreeNode(4,
+                        new TreeNode(5),
+                        new TreeNode(1))));
+        assertEquals(isBalanced(t1), false);
+    }
+    public static List<List<Integer>> levelOrder(TreeNode root) {
+        if(root == null) return new ArrayList<>();
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        List<List<Integer>> rows = new ArrayList<>();
+        do {
+            Queue<TreeNode> temp = new ArrayDeque<>();
+            List<Integer> r = new ArrayList<>();
+            while(!queue.isEmpty()) {
+                TreeNode n = queue.remove();
+                r.add(n.val);
+                if(n.left != null) temp.add(n.left);
+                if(n.right != null) temp.add(n.right);
+            }
+            rows.add(r);
+            if(!temp.isEmpty()) queue = temp;
+        } while(!queue.isEmpty());
+        return rows;
+    }
+
+    public static int rob2(int[] arr) {
+        int[] max = new int[arr.length];
+        //assume elements in arr are all positive
+        for(int i=0; i<arr.length; i++) max[i] = -1; 
+        return _rob2(arr, 0, max);
+    }
+    private static int _rob2(int[] arr, int start, int[] cache) {
+        if(arr.length == 0) return 0;
+        if(start >= arr.length) return 0;
+        if(start == arr.length-1) return arr[start];
+        if(cache[start] != -1) return cache[start];
+        int a = arr[start] + _rob2(arr, start+2, cache);
+        int b = _rob2(arr, start+1, cache);
+        if(a > b) {
+            cache[start] = a;
+            return a;
+        } else {
+            cache[start] = b;
+            return b;
+        }
+    }
+
+    public int maxDepth(TreeNode root) {
+        if(root == null) return 0;
+        int a = maxDepth(root.left);
+        int b = maxDepth(root.right);
+        return 1 + (a>b?a:b);
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -1881,5 +2039,7 @@ public class Solution {
         testLengthOfLastWord();
         testGetRow();
         testPathSum();
+        testMinDepth();
+        testIsBalanced();
     }
 }
