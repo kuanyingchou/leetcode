@@ -1994,6 +1994,100 @@ public class Solution {
         int b = maxDepth(root.right);
         return 1 + (a>b?a:b);
     }
+    public int maxDepthIterative(TreeNode root) {
+        if(root == null) return 0;
+        final Stack<TreeNodeDepth> stack = new Stack<>();
+        stack.push(new TreeNodeDepth(root, 1));
+        int maxDepth = 0;
+        while(!stack.isEmpty()) {
+            TreeNodeDepth n = stack.pop();
+            if(n.depth > maxDepth) maxDepth = n.depth;
+            if(n.node.right != null)
+                stack.push(new TreeNodeDepth(
+                            n.node.right, n.depth+1));
+            if(n.node.left != null)
+                stack.push(new TreeNodeDepth(
+                            n.node.left, n.depth+1));
+        }
+        return maxDepth;
+    }
+    //(1 (2 (4 5)) (3 (6 7 (8))))
+    private static class TreeNodeDepth {
+        public TreeNode node;
+        public int depth;
+        public TreeNodeDepth(TreeNode n, int d) {
+            this.node = n;
+            this.depth = d;
+        }
+    }
+
+    public static boolean isSymmetric(TreeNode root) {
+        if(root == null) return true;
+        else return isMirror(root.left, root.right);
+    }
+    private static boolean isMirror(TreeNode a, TreeNode b) {
+        if(a == null ^ b == null) { //one is null, the other is not
+            return false;
+        } else if(a == null) { // both are null
+            return true;
+        } else { // both are not null
+            if(a.val != b.val) return false;
+            if(!isMirror(a.left, b.right)) return false;
+            if(!isMirror(a.right, b.left)) return false;
+        }
+        return true;
+    }
+    public static boolean isSymmetricIteration(TreeNode root) {
+        if(root == null) return true;
+        Stack<TreeNode> leftStack = new Stack<>();
+        Stack<TreeNode> rightStack = new Stack<>();
+        if(root.left != null) leftStack.push(root.left);
+        if(root.right != null) rightStack.push(root.right);
+        while(!leftStack.isEmpty() && !rightStack.isEmpty()) {
+            TreeNode ln = leftStack.pop();
+            TreeNode rn = rightStack.pop();
+            if(ln == null ^ rn == null) 
+                return false;
+            else if(ln != null) {
+                if(ln.val != rn.val)
+                    return false;
+                leftStack.push(ln.right);
+                leftStack.push(ln.left);
+                rightStack.push(rn.left);
+                rightStack.push(rn.right);
+            }
+        }
+        if(leftStack.isEmpty() ^ rightStack.isEmpty()) return false;
+        return true;
+    }
+
+    private static void testIsSymmetric() {
+        TreeNode root = new TreeNode(1,
+                new TreeNode(2,
+                    new TreeNode(3,
+                        new TreeNode(5),
+                        new TreeNode(6)),
+                    new TreeNode(4,
+                        new TreeNode(7),
+                        new TreeNode(8))),
+                new TreeNode(2,
+                    new TreeNode(4,
+                        new TreeNode(8),
+                        new TreeNode(7)),
+                    new TreeNode(3,
+                        new TreeNode(6),
+                        new TreeNode(5))));
+        assertEquals(isSymmetricIteration(root), true);
+
+        TreeNode root2 = new TreeNode(1,
+                new TreeNode(2,
+                    null,
+                    new TreeNode(3)),
+                new TreeNode(2,
+                    null,
+                    new TreeNode(3)));
+        assertEquals(isSymmetricIteration(root2), false);
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
@@ -2041,5 +2135,6 @@ public class Solution {
         testPathSum();
         testMinDepth();
         testIsBalanced();
+        testIsSymmetric();
     }
 }
