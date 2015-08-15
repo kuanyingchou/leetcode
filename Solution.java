@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Stack;
 import java.util.ArrayDeque;
+import java.util.stream.Collectors;
 
 public class Solution {
     //utilities
@@ -2096,6 +2097,52 @@ public class Solution {
         else return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
+    public static List<List<Integer>> levelOrderBottom(
+            TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null) return res;
+        List<TreeNode> row = new ArrayList<>();
+        row.add(root);
+        while(!row.isEmpty()) {
+            res.add(0, row.stream().map(n->n.val).collect(Collectors.toList()));
+            List<TreeNode> newRow = new ArrayList<>();
+            for(TreeNode n: row) {
+                if(n.left != null) newRow.add(n.left);
+                if(n.right != null) newRow.add(n.right);
+            }
+            row = newRow;
+        }
+        return res;
+    }
+
+    public static void merge(int[] nums1, int m, int[] nums2, int n) {
+        int index = m+n-1;
+        int mi = m-1;
+        int ni = n-1;
+        while(mi >= 0 && ni >= 0) {
+            if(nums1[mi] >= nums2[ni]) {
+                nums1[index--] = nums1[mi--];
+            } else {
+                nums1[index--] = nums2[ni--];
+            }
+        }
+        while(mi >= 0) {
+            nums1[index--] = nums1[mi--];
+        }
+        while(ni >= 0) {
+            nums1[index--] = nums2[ni--];
+        }
+    }
+    private static void testMerge() {
+        int[] a = {1, 3, 5, 7, 9, 0, 0, 0, 0, 0};
+        int[] b = {2, 4, 6, 8, 10};
+        merge(a, 5, b, 5);
+        int[] r = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        for(int i=0; i<10; i++) {
+            assertEquals(a[i], r[i]);
+        }
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -2143,5 +2190,6 @@ public class Solution {
         testMinDepth();
         testIsBalanced();
         testIsSymmetric();
+        testMerge();
     }
 }
