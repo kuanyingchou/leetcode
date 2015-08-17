@@ -795,6 +795,19 @@ public class Solution {
         }
         return res;
     }
+    public static int majorityElementImpl2(int[] nums) {
+        int major = nums[0]; int count = 1;
+        for(int i=1; i<nums.length; i++) {
+            if(nums[i] == major) {
+                count++;
+            } else if(count>0) {
+                count--;
+            } else {
+                major = nums[i];
+            }
+        }
+        return major;
+    }
     public static void testMajorityElement() {
         assertEquals(majorityElement(new int[] {2, 3, 3, 3, 2}), 3);
         assertEquals(majorityElement(new int[] {3, 3, 3, 2, 2}), 3);
@@ -2143,6 +2156,91 @@ public class Solution {
         }
     }
 
+    public static boolean isValidSudoku(char[][] board) {
+        if(board.length == 0 || board[0].length == 0) return true;
+        if(board.length != board[0].length) return false;
+        char[] temp = new char[board.length];
+
+        //rows
+        System.out.println("rows");
+        for(int i=0; i<board.length; i++) {
+            for(int j=0; j<temp.length; j++) temp[j] = '.';
+            for(int j=0; j<board.length; j++) {
+                char v = board[i][j];
+                if(v != '.') {
+                    if(temp[v-'1'] != '.') return false;
+                    temp[v-'1'] = v;
+                }
+            }
+            for(int j=0; j<temp.length; j++) System.out.print(temp[j]+" ");
+            System.out.println();
+        }
+
+        //cols
+        System.out.println("cols");
+        for(int i=0; i<board.length; i++) {
+            for(int j=0; j<temp.length; j++) temp[j] = '.';
+            for(int j=0; j<board.length; j++) {
+                char v = board[j][i];
+                if(v != '.') {
+                    if(temp[v-'1'] != '.') return false;
+                    temp[v-'1'] = v;
+                }
+            }
+            for(int j=0; j<temp.length; j++) System.out.print(temp[j]+" ");
+            System.out.println();
+        }
+
+        //9 patch
+        for(int c=0; c<3; c++) {
+            for(int r=0; r<3; r++) {
+                for(int i=0; i<temp.length; i++) temp[i] = '.';
+                for(int i=0; i<temp.length; i++) {
+                    char v = board[i/3 + c*3][i%3 + r*3];
+                    if(v != '.') {
+                        if(temp[v-'1'] != '.') return false;
+                        temp[v-'1'] = v;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private static void testIsValidSudoku() {
+        String[] input = new String[] {
+            "..4...63.",
+            ".........",
+            "5......9.",
+            "...56....",
+            "4.3.....1",
+            "...7.....",
+            "...5.....",
+            ".........",
+            "........."};
+        char[][] inputC = new char[input.length][];
+        for(int i=0; i<input.length; i++) {
+            inputC[i] = input[i].toCharArray();
+        }
+        assertEquals(isValidSudoku(inputC), false);
+
+        input = new String[] {
+            ".87654321",
+            "2........",
+            "3........",
+            "4........",
+            "5........",
+            "6........",
+            "7........",
+            "8........",
+            "9........"};
+        inputC = new char[input.length][];
+        for(int i=0; i<input.length; i++) {
+            inputC[i] = input[i].toCharArray();
+        }
+        assertEquals(isValidSudoku(inputC), true);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -2191,5 +2289,6 @@ public class Solution {
         testIsBalanced();
         testIsSymmetric();
         testMerge();
+        testIsValidSudoku();
     }
 }
