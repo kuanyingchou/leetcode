@@ -2241,6 +2241,57 @@ public class Solution {
         assertEquals(isValidSudoku(inputC), true);
     }
 
+    public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode answer = null;
+        ListNode tail = null;
+        int carry = 0;
+        ListNode p = l1, q = l2;
+        for(;p != null && q != null;p = p.next, q = q.next) {
+            int v = p.val + q.val + carry;
+            ListNode n = new ListNode(v % 10);
+            if(tail == null) {
+                tail=n;
+            } else {
+                tail.next = n;
+                tail = n;
+            }
+            carry = v / 10;
+            if(answer == null) answer = tail;
+        }
+        ListNode o = (p == null)?q:p;
+        while(o != null) {
+            int v = o.val + carry;
+            tail.next = new ListNode(v % 10);
+            tail = tail.next;
+            carry = v / 10;
+            o = o.next;
+        }
+        if(carry != 0) {
+            tail.next = new ListNode(carry);
+        }
+        return answer;
+    }
+    private static void testAddTwoNumbers() {
+        //342 + 465 = 807
+        ListNode a = new ListNode(2, new ListNode(4, new ListNode(3)));
+        System.out.println(a);
+        ListNode b = new ListNode(5, new ListNode(6, new ListNode(4)));
+        System.out.println(b);
+
+        ListNode r = addTwoNumbers(a, b);
+        System.out.println(r);
+
+        a = new ListNode(2, new ListNode(4, new ListNode(3)));
+        b = new ListNode(8);
+        r = addTwoNumbers(a, b);
+        System.out.println(r);
+
+        a = new ListNode(5);
+        b = new ListNode(5);
+        r = addTwoNumbers(a, b);
+        System.out.println(r);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -2290,5 +2341,6 @@ public class Solution {
         testIsSymmetric();
         testMerge();
         testIsValidSudoku();
+        testAddTwoNumbers();
     }
 }
