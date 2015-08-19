@@ -2292,6 +2292,35 @@ public class Solution {
         System.out.println(r);
     }
 
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(numRows==0) return res;
+        List<Integer> fr = new ArrayList<>();
+        fr.add(1);
+        res.add(fr);
+        for(int i=1; i<numRows; i++) {
+            List<Integer> row = new ArrayList<>();
+            List<Integer> last = res.get(res.size()-1);
+            row.add(1);
+            for(int j=1; j<last.size(); j++) {
+                row.add(last.get(j-1)+last.get(j));
+            }
+            row.add(1);
+            res.add(row);
+        }
+        return res;
+    }
+    private static void testGenerate() {
+        List<List<Integer>> p = generate(5);
+        for(List<Integer> row: p) {
+            for(int i: row) {
+                System.out.print(i);
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -2342,5 +2371,6 @@ public class Solution {
         testMerge();
         testIsValidSudoku();
         testAddTwoNumbers();
+        testGenerate();
     }
 }
