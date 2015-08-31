@@ -567,6 +567,14 @@ public class Solution {
         }
         return res;
     }
+    public static int reverseBits2(int n) {
+        n = n>>>16 | n<<16;
+        n = (n & 0xff00ff00) >>> 8 | (n & 0x00ff00ff) << 8;
+        n = (n & 0xf0f0f0f0) >>> 4 | (n & 0x0f0f0f0f) << 4;
+        n = (n & 0xcccccccc) >>> 2 | (n & 0x33333333) << 2;
+        n = (n & 0xaaaaaaaa) >>> 1 | (n & 0x55555555) << 1;
+        return n;
+    }
     public static void testReverseBits() {
         /*
         System.out.println(Integer.toBinaryString(1));
@@ -579,9 +587,9 @@ public class Solution {
         System.out.println(Integer.toBinaryString(Integer.MIN_VALUE>>>31));
         */
 
-        assertEquals(reverseBits(43261596), 964176192);
-        assertEquals(reverseBits(1), Integer.MIN_VALUE);
-        assertEquals(reverseBits(Integer.MIN_VALUE), 1);
+        assertEquals(reverseBits2(43261596), 964176192);
+        assertEquals(reverseBits2(1), Integer.MIN_VALUE);
+        assertEquals(reverseBits2(Integer.MIN_VALUE), 1);
           
     }
 
@@ -2390,6 +2398,42 @@ public class Solution {
         assertEquals(isAnagram(s, t), true);
     }
 
+    public static double myPow(double x, int n) {
+        double res = 1;
+        while(n > 0) {
+            res *= x;
+            --n;
+        }
+        return res;
+    }
+    public static double myPow2(double x, int n) {
+        //System.out.println(x + " ^ " + n);
+        if(n==0) return 1;
+        if(n==1) return x;
+        boolean positive = true;
+        if(n < 0) {
+            n = -n;
+            positive = false;
+        }
+        double p = myPow(x, n/2);
+        if(n % 2 == 0) {
+            //System.out.println("Hi");
+            if(positive) 
+                return p * p;
+            else 
+                return 1 / (p * p);
+        } else {
+            if(positive)
+                return p * p * x;
+            else 
+                return 1 / (p * p * x);
+        }
+    }
+    private static void testMyPow() {
+        //assertEquals(myPow2(2, 2), 4.0);
+        //assertEquals(myPow2(8.88023, 3), 700.28148);
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -2442,5 +2486,6 @@ public class Solution {
         testAddTwoNumbers();
         testGenerate();
         testIsAnagram();
+        testMyPow();
     }
 }
