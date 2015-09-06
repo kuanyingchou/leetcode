@@ -1567,15 +1567,40 @@ public class Solution {
         }
         return head;
     }
+
+    static class Int {
+        int val = 0;
+        public Int(int v) {
+            val = v;
+        }
+    }
+    public static ListNode removeNthFromEnd2(ListNode head, int n) {
+        Int count = new Int(0); 
+        return _removeNthFromEnd2(head, n, count);
+    }
+    public static ListNode _removeNthFromEnd2(ListNode head, int n, Int count) {
+        if(head == null) return null;
+        head.next = _removeNthFromEnd2(head.next, n, count);
+        ++count.val;
+        if(count.val == n) {
+            return head.next;
+        } else {
+            return head;
+        }
+    }
+
     private static void testRemoveNthFromEnd() {
         ListNode l1 = new ListNode(1, new ListNode(2, new ListNode(3)));
-        assertEquals(removeNthFromEnd(l1, 2).toString(), 
+        assertEquals(removeNthFromEnd2(l1, 2).toString(), 
                 new ListNode(1, new ListNode(3)).toString());
         ListNode l2 = new ListNode(1);
-        assertEquals(removeNthFromEnd(l2, 2).toString(), 
+        assertEquals(removeNthFromEnd2(l2, 2).toString(), 
                 new ListNode(1).toString());
         ListNode l3 = new ListNode(1);
-        assertEquals(removeNthFromEnd(l3, 1), null);
+        assertEquals(removeNthFromEnd2(l3, 1), null);
+        ListNode l4 = new ListNode(1, new ListNode(2, new ListNode(3)));
+        assertEquals(removeNthFromEnd2(l4, 1).toString(), 
+                new ListNode(1, new ListNode(2)).toString());
 
     }
 
@@ -2432,6 +2457,47 @@ public class Solution {
     private static void testMyPow() {
         //assertEquals(myPow2(2, 2), 4.0);
         //assertEquals(myPow2(8.88023, 3), 700.28148);
+    }
+
+    public static int removeElement(int[] nums, int val) {
+        int len = nums.length;
+        int i = 0;
+        while(i < len) {
+            if(nums[i] == val) {
+                nums[i] = nums[--len];
+            } else {
+                ++i;
+            }
+        }
+        return len;
+    }
+
+    //1: 1
+    //2: 11
+    //3: 21
+    //4: 1211
+    //5: 111221
+    //6: 312211
+    //7: 13112221
+    public static String countAndSay(int n) {
+        if(n<1) return "";
+        String res = "1";
+        if(n == 1) return res;
+        int k = 1;
+        while(k < n) {
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            while(i < res.length()) {
+                char c = res.charAt(i);
+                int j = i + 1;
+                while(j < res.length() && res.charAt(j) == c) j++;
+                sb.append(String.valueOf(j-i)+c);
+                i = j;
+            } 
+            res = sb.toString();
+            ++k;
+        }
+        return res;
     }
 
     public static void main(String[] args) {
