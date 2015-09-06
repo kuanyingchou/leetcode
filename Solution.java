@@ -2508,7 +2508,22 @@ public class Solution {
         }
         return false;
     }
+
     //>>> constant space
+    public static boolean hasCycle2(ListNode head) {
+        if(head == null) return false;
+        
+        ListNode slow = head, fast = head.next;
+        while(fast != null) {
+            if(fast.next == slow || fast == slow) return true;
+            if(fast.next == null) break;
+            fast = fast.next;
+            if(fast.next == null) break;
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return false;
+    }
 
     public static int addDigits(int num) {
         if(num == 0) return 0;
