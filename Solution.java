@@ -2510,6 +2510,12 @@ public class Solution {
     }
     //>>> constant space
 
+    public static int addDigits(int num) {
+        if(num == 0) return 0;
+        final int r = num % 9;
+        return (r==0)?9:r;
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
