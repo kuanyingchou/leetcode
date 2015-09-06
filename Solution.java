@@ -2500,6 +2500,16 @@ public class Solution {
         return res;
     }
 
+    public static boolean hasCycle(ListNode head) {
+        final HashSet<ListNode> set = new HashSet<>();
+        for(ListNode n = head; n!=null; n=n.next) {
+            if(set.contains(n)) return true;
+            else set.add(n);
+        }
+        return false;
+    }
+    //>>> constant space
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
