@@ -2531,6 +2531,30 @@ public class Solution {
         return (r==0)?9:r;
     }
 
+    //>>>constant space?
+    public static ListNode detectCycle(ListNode head) {
+        HashSet<ListNode> set = new HashSet<>();
+        for(ListNode p = head; p!=null; p = p.next) {
+            if(set.contains(p)) return p;
+            else set.add(p);
+        }
+        return null;
+    }
+
+    //>>>bottom-up?
+    public static int climbStairs(int n) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        return _climbStairs(n, map);
+    }
+    private static int _climbStairs(int n, HashMap<Integer, Integer> map) {
+        if(map.containsKey(n)) return map.get(n);
+        if(n <= 1) return 1;
+        if(n == 2) return 2;
+        int r = _climbStairs(n-1, map) + _climbStairs(n-2, map);
+        map.put(n, r);
+        return r;
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
