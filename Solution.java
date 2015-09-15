@@ -2602,6 +2602,61 @@ public class Solution {
         return res;
     }
 
+    public static String addBinary(String a, String b) {
+        int len = Math.max(a.length(), b.length());
+        char[] values = new char[len+1];
+        
+        for(int i=1; i<=a.length(); i++) {
+            values[values.length - i] = a.charAt(a.length() - i);
+        }
+        for(int i=a.length()+1; i<=values.length; i++) {
+            values[values.length - i] = '0';
+        }
+
+        //System.err.println(">>> "+new String(values));
+
+        for(int i=1; i<=b.length(); i++) {
+            char d1 = values[values.length - i];
+            char d2 = b.charAt(b.length()-i);
+            int carry = 0;
+            if(d1 == '1') {
+                if(d2 == '1') {
+                    values[values.length - i] = '0';
+                    carry = 1;
+                }
+            } else {
+                if(d2 == '1') {
+                    values[values.length - i] = '1';
+                }
+            }
+            int index = values.length - i - 1;
+            while(carry > 0) {
+                char d = values[index];
+                if(d == '1') {
+                    values[index] = '0';
+                    --index;
+                } else {
+                    values[index] = '1';
+                    break;
+                }
+            } 
+            
+            //System.err.println(">>> "+new String(values));
+        }
+        if(values[0] == '0') {
+            char[] res = new char[values.length - 1];
+            for(int i=0; i<res.length; i++) {
+                res[i] = values[i+1];
+            }
+            return new String(res);
+        } else {
+            return new String(values);
+        }
+    }
+    private static void testAddBinary() {
+        assertEquals(addBinary("1", "1"), "10");
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -2655,5 +2710,6 @@ public class Solution {
         testGenerate();
         testIsAnagram();
         testMyPow();
+        testAddBinary();
     }
 }
