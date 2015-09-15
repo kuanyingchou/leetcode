@@ -2554,6 +2554,37 @@ public class Solution {
         map.put(n, r);
         return r;
     }
+    public static int[] singleNumberIII(int[] nums) {
+        int t = 0;
+        for(int i=0; i<nums.length; i++) {
+            t ^= nums[i];
+        }
+        int d = t & ~(t - 1);
+        int a = 0;
+        int b = 0;
+        for(int i=0; i<nums.length; i++) {
+            if((d & nums[i]) > 0) 
+                a ^= nums[i];
+            else 
+                b ^= nums[i];
+        }
+        return new int[] {a, b};
+    }
+    public static ListNode deleteDuplicates(ListNode head) {
+        if(head == null) return head;
+        ListNode p = head;
+        ListNode q = head.next;
+        while(q != null) {
+            if(q.val == p.val) {
+                q = q.next;
+                p.next = q;
+            } else {
+                p = p.next;
+                q = q.next;
+            }
+        }
+        return head;
+    }
 
     public static void main(String[] args) {
         testSingleNumber();
