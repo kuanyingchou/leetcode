@@ -2689,6 +2689,93 @@ public class Solution {
         return (num==1)?true:false;
     }
 
+    public static int strStr(String haystack, String needle) {
+        if(haystack.isEmpty()) {
+            if(needle.isEmpty()) 
+                return 0;
+            else 
+                return -1;
+        }
+        if(needle.isEmpty()) return 0;
+        int lenH = haystack.length();
+        int lenN = needle.length();
+        for(int i=0; i<=lenH-lenN; i++) {
+            if(haystack.charAt(i) == needle.charAt(0)) {
+                int j=0;
+                for(; i+j < lenH && j<lenN; j++) {
+                    if(haystack.charAt(i+j) != needle.charAt(j)) {
+                        break;
+                    }
+                }
+                if(i+j <= lenH && j == lenN) {
+                    return i;
+                }
+            }
+            
+        }
+        return -1;
+    }
+
+    public static List<String> binaryTreePaths(TreeNode root) {
+        List<String> lists = new ArrayList<>();
+        if(root == null) return lists;
+        if(root.left != null) {
+            List<String> l = binaryTreePaths(root.left);
+            for(String s: l) {
+                lists.add(root.val + "->"+s);
+            }
+        }
+        if(root.right != null) {
+            List<String> r = binaryTreePaths(root.right);
+            for(String s: r) {
+                lists.add(root.val + "->"+s);
+            }
+        }
+        if(lists.isEmpty()) {
+            lists.add(String.valueOf(root.val));
+        }
+        return lists;
+    }
+
+    public static int firstBadVersion(int n) {
+        int a=1;
+        int b=n;
+        int t;
+        while(a != b) {
+            //System.err.println(a+" - "+b);
+            t = (int)(((long)a+b)/2);
+            if(isBadVersion(t)) {
+                b = t;
+            } else {
+                a = t+1;
+            }
+        }
+        return a;
+    }
+    private static int badVersion = 1;
+    private static boolean isBadVersion(int v) {
+        return v >= badVersion;
+    }
+    private static void testBadVersion() {
+        //int t = 2126753390; 
+        //System.err.println(">>>> "+((long)t + t) / 2);
+        badVersion = 2;
+        assertEquals(firstBadVersion(3), badVersion);
+        badVersion = 2;
+        assertEquals(firstBadVersion(4), badVersion);
+        badVersion = 1702766719;
+        assertEquals(firstBadVersion(2126753390), badVersion);
+    }
+
+    public static int missingNumber(int[] nums) {
+        int sum = nums.length * (nums.length+1) / 2;
+        int aSum = 0;
+        for(int i=0; i<nums.length; i++) {
+            aSum += nums[i];
+        }
+        return sum - aSum;
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -2743,5 +2830,6 @@ public class Solution {
         testIsAnagram();
         testMyPow();
         testAddBinary();
+        testBadVersion();
     }
 }
