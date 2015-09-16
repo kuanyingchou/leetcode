@@ -2657,6 +2657,38 @@ public class Solution {
         assertEquals(addBinary("1", "1"), "10");
     }
 
+    public static boolean isUgly(int num) {
+        if(num == 1) return true;
+        if(num <= 0) return false;
+        if(!(num % 2 == 0 || num % 3 == 0 || num % 5 == 0)) return false;
+        for(int i=7; i*2<=num; i+=2) {
+            if(num % i == 0) {
+                if(isPrimeForIsUgly(i)) {        
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private static boolean isPrimeForIsUgly(int v) {
+        for(int i=3; i*i <= v; i+=2) {
+            if(v % i == 0) return false;
+        }
+        return true;
+    }
+
+    public boolean isUgly2(int num) {
+        if(num <= 0) return false;
+        int i = 2;
+        while(i<=5 && num != 1) {
+            if(num % i == 0) 
+                num /= i;
+            else 
+                ++i;
+        }
+        return (num==1)?true:false;
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
