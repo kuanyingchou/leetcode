@@ -2776,6 +2776,35 @@ public class Solution {
         return sum - aSum;
     }
 
+    public static List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        for(int i=0; i<nums.length; i++) {
+            int[] n = exclude(nums, i);
+            if(n.length == 0) {
+                List<Integer> r = new ArrayList<>();
+                r.add(nums[i]);
+                res.add(r);
+            } else {
+                List<List<Integer>> s = permute(n);
+                for(List<Integer> l: s) {
+                    l.add(0, nums[i]);
+                    res.add(l);
+                }
+            }
+            
+        }
+        return res;
+    }
+    private static int[] exclude(int[] nums, int e) {
+        int[] res = new int[nums.length-1];
+        int index = 0;
+        for(int i=0; i<nums.length; i++) {
+            if(i == e) continue;
+            res[index++] = nums[i];
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
