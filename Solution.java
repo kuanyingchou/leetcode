@@ -2805,6 +2805,45 @@ public class Solution {
         return res;
     }
 
+    public static List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        Set<Integer> set = new HashSet<>();
+                
+        for(int i=0; i<nums.length; i++) {
+            if(set.contains(nums[i])) continue;
+            set.add(nums[i]);
+            int[] n = exclude(nums, i);
+            if(n.length == 0) {
+                List<Integer> r = new ArrayList<>();
+                r.add(nums[i]);
+                res.add(r);
+            } else {
+                List<List<Integer>> s = permuteUnique(n);
+                for(List<Integer> l: s) {
+                    l.add(0, nums[i]);
+                    res.add(l);
+                }
+            }
+            
+        }
+        return res;
+
+    }
+    public static int maxProfit(int[] prices) {
+        if(prices.length < 2) return 0;
+        int maxProfit = 0;
+        int min = Integer.MAX_VALUE;
+        for(int i=0; i<prices.length; i++) {
+            if(prices[i]<min) {
+                min = prices[i];
+            } else {
+                int p = prices[i]-min;
+                if(p > maxProfit) maxProfit = p;
+            }
+        }
+        return maxProfit;
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
