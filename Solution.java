@@ -91,7 +91,8 @@ public class Solution {
         }
 
         public String toString() {
-            return val + "("+ (left!=null?left:"") +", "+(right!=null?right:"")+")";
+            //return val + "("+ (left!=null?left:"") +", "+(right!=null?right:"")+")";
+            return String.valueOf(val);
         }
     }
     public static TreeNode invertTree(TreeNode root) {
@@ -2873,6 +2874,63 @@ public class Solution {
         return profit;
     }
 
+    public static List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        if(root == null) return list;
+        stack.push(root);
+        while(!stack.isEmpty()) {
+            TreeNode p = stack.peek();
+            if(p.left != null) {
+                stack.push(p.left);
+                p.left = null; //>>>>>>>>>>>>>
+            } else {
+                stack.pop();
+                list.add(p.val);
+                if(p.right != null) {
+                    stack.push(p.right);
+                }
+            }
+            //System.out.println(stack);
+            //try{
+            //    Thread.sleep(1000);
+            //}catch(Exception e) {}
+        }
+        return list;
+    }
+    private static void testInorderTraversal() {
+        TreeNode root = new TreeNode(1, 
+            new TreeNode(2),
+            null);
+        System.out.println(inorderTraversal(root));
+        root = new TreeNode(6, 
+            new TreeNode(2, 
+                new TreeNode(0), 
+                new TreeNode(4, 
+                    new TreeNode(3),
+                    new TreeNode(5))),
+            new TreeNode(8,
+                new TreeNode(7),
+                new TreeNode(9)));
+        System.out.println(inorderTraversal(root));
+    }
+
+    public static void moveZeroes(int[] nums) {
+        int count = 0;
+        for(int i=0; i<nums.length; i++) {
+            if(nums[i] == 0) ++count;
+        }
+        int index = 0;
+        for(int i=0; i<nums.length; i++) {
+            if(nums[i] != 0) {
+                nums[index++] = nums[i];
+            }
+        }
+        for(int i = index; i<nums.length; i++) {
+            nums[i] = 0;
+        }
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -2928,5 +2986,6 @@ public class Solution {
         testMyPow();
         testAddBinary();
         testBadVersion();
+        testInorderTraversal();
     }
 }
