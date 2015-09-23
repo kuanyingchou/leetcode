@@ -2931,6 +2931,26 @@ public class Solution {
         }
     }
 
+    public static void connect(TreeLinkNode root) {
+        if(root == null) return;
+        int count = 1;
+        Queue<TreeLinkNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        while(!queue.isEmpty()) {
+            TreeLinkNode p = queue.remove();
+            if(p.left != null) queue.add(p.left);
+            if(p.right != null) queue.add(p.right);
+            for(int i=1; i<count; i++) {
+                p.next = queue.remove();
+                p = p.next;
+                if(p.left != null) queue.add(p.left);
+                if(p.right != null) queue.add(p.right);
+            }
+            count *= 2;
+            
+        }
+    }
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
