@@ -2931,6 +2931,11 @@ public class Solution {
         }
     }
 
+    static class TreeLinkNode {
+        TreeLinkNode left;
+        TreeLinkNode right;
+        TreeLinkNode next;
+    }
     public static void connect(TreeLinkNode root) {
         if(root == null) return;
         int count = 1;
@@ -2949,6 +2954,25 @@ public class Solution {
             count *= 2;
             
         }
+    }
+
+    public static List<Integer> grayCode(int n) {
+        List<Integer> res = new ArrayList<>();
+        
+        res.add(0);
+        if(n == 0) return res;
+        res.add(1);
+        
+        int mask = 2;
+        for(int i=1; i<n; i++) {
+            int size = res.size();
+            for(int j = size-1; j>=0; --j) {
+                res.add(res.get(j) | mask);
+            }
+            mask <<= 1;
+        }
+        
+        return res;
     }
 
     public static void main(String[] args) {
