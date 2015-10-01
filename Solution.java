@@ -3058,6 +3058,22 @@ public class Solution {
         assertEquals(numTrees(4), 14);
         System.out.println(numTrees(4));
     }
+    public static int trap(int[] height) {
+        int[] arr = new int[height.length];
+        int max = Integer.MIN_VALUE;
+        for(int i=0; i<height.length; i++) {
+            if(height[i] > max) max = height[i];
+            arr[i] = max;
+        }
+        max = Integer.MIN_VALUE;
+        int sum = 0;
+        for(int i=height.length-1; i>=0; i--) {
+            if(height[i] > max) max = height[i];
+            arr[i] = Math.min(arr[i], max);
+            sum += arr[i]-height[i];
+        }
+        return sum;
+    }
 
 
 
