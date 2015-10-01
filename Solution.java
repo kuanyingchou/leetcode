@@ -2975,6 +2975,92 @@ public class Solution {
         return res;
     }
 
+    //Best Time to Buy and Sell Stock III
+    public static int maxProfitIII(int[] prices) {
+        if(prices == null || prices.length == 0) return 0;
+        int maxProfit = Integer.MIN_VALUE;
+        for(int i=0;i<prices.length; i++) {
+            int p = maxProfitIII(prices, 0, i) + maxProfitIII(prices, i, prices.length);
+            if(p > maxProfit) maxProfit = p;
+        }
+        return maxProfit;
+    }
+    //range: start - (end-1)
+    private static int maxProfitIII(int[] prices, int start, int end) {
+        if(start == end) return 0;
+        int min = Integer.MAX_VALUE;
+        int profit = Integer.MIN_VALUE;
+        for(int i=start; i<end; i++) {
+            if(prices[i] < min) min = prices[i];
+            int p = prices[i] - min;
+            if(p > profit) profit = p;
+        }
+        return profit;
+    }
+
+    //  0  1  2  3
+    // |1 |2 |3 |4 |
+    // |1 |1 |2 |6 | 
+    // |24|12|8 |6
+    public static int[] productExceptSelf(int[] nums) {
+        if(nums==null || nums.length == 0) return new int[0];
+        if(nums.length == 1) return new int[] {1};
+        int[] res = new int[nums.length];
+        res[0] = 1;
+        for(int i=1; i<nums.length; i++) {
+            res[i] = res[i-1] * nums[i-1];
+        }
+        int m = 1;
+        for(int i=nums.length-1; i>=0; i--) {
+            res[i] *= m;
+            m *= nums[i];
+        }
+        return res;
+    }
+
+    //>>> this is linear, how about binary search
+    public static int searchInsert(int[] nums, int target) {
+        for(int i=0; i<nums.length; i++) {
+            if(nums[i] >= target) return i;
+        }
+        return nums.length;
+    }
+
+    //TODO: can be further optimized
+    public static int numTrees(int n) {
+        if(n == 0) return 1;
+        if(n <= 2) return n;
+        int[] r = new int[n+1];
+        for(int i=0; i<=n; i++) r[i] = 0; 
+        r[0] = 1;
+        r[1] = 1;
+        r[2] = 2;
+        return _numTrees(n, r);
+    }
+    public static int _numTrees(int n, int[] r) {
+        if(r[n] != 0) return r[n];
+        
+        for(int j=3; j<=n; j++) {
+            int sum = 0;
+            for(int i=0; i<j; i++) {
+                sum += r[i] * r[j-i-1];
+                //System.out.printf("n=%d, j=%d, i=%d, sum=%d %n", n, j, i, sum);
+            }
+            r[j] = sum;
+            //System.out.printf("r[%d]=%d %n", j, r[j]);
+        }
+        return r[n];
+    }
+    private static void testNumTrees() {
+        assertEquals(numTrees(1), 1);
+        assertEquals(numTrees(2), 2);
+        assertEquals(numTrees(3), 5);
+        assertEquals(numTrees(4), 14);
+        System.out.println(numTrees(4));
+    }
+
+
+
     public static void main(String[] args) {
         testSingleNumber();
         testInvertTree();
@@ -3031,5 +3117,6 @@ public class Solution {
         testAddBinary();
         testBadVersion();
         testInorderTraversal();
+        testNumTrees();
     }
 }
