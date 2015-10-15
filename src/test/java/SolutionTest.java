@@ -65,4 +65,24 @@ public class SolutionTest {
             $(new Q204Sieve())
         );
     }
+
+    @Test
+    public void test() {
+        MRotated r = new MRotated();
+        int[] arr = new int[] {1, 2, 3, 4, 5};
+        for(int i=0; i<5; i++) {
+            assertEquals(r.find(arr, i+1), i);
+        }
+    }
+
+    @Test
+    @Parameters(method="pFrog")
+    public void test(Frog f) {
+        assertEquals(f.jump(7, 3, new int[] {5, 1, 1, 2, 3}), -1);
+        assertEquals(f.jump(7, 3, new int[] {5, 1, 1, 2, 4}), 4);
+        assertEquals(f.jump(7, 3, new int[] {1, 2, 3, 1, 2, 3, 4}), 6);
+    }
+    public Object[] pFrog() {
+        return $($(new Frog()));
+    }
 }
