@@ -83,6 +83,32 @@ public class SolutionTest {
         assertEquals(f.jump(7, 3, new int[] {1, 2, 3, 1, 2, 3, 4}), 6);
     }
     public Object[] pFrog() {
-        return $($(new Frog()));
+        return $($(
+            new Frog()/*, new Frog2()*/));
+    }
+
+    @Test
+    @Parameters(method="pNim")
+    public void test(Q292NimGame q) {
+        boolean[] answers = new boolean[] {
+            false,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true
+        };
+        for(int i=1; i<=10; i++) {
+            assertEquals(q.canWinNim(i), answers[i]);
+        }
+        
+    }
+    public Object[] pNim() {
+        return $($(new NimGame1(), new NimGame2(), new NimGame3()));
     }
 }
