@@ -111,4 +111,26 @@ public class SolutionTest {
     public Object[] pNim() {
         return $($(new NimGame1(), new NimGame2(), new NimGame3()));
     }
+
+    @Test
+    public void testQ200() {
+        Q200NumIslands q = new Q200NumIslands();
+        char[][] map = new char[][] {
+            new char[] {'1'}
+        };
+        assertEquals(1, q.numIslands(map));
+
+        map = new char[][] {
+            new char[] {'1', '1'}
+        };
+        assertEquals(1, q.numIslands(map));
+
+        map = new char[][] {
+            new char[] {'1'},
+            new char[] {'1'},
+        };
+
+        assertEquals(1, q.numIslands(map));
+
+    }
 }
