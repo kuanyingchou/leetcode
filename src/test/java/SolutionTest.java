@@ -129,8 +129,13 @@ public class SolutionTest {
             new char[] {'1'},
             new char[] {'1'},
         };
-
         assertEquals(1, q.numIslands(map));
 
+        map = new char[][] {
+            new char[] {'1', '0', '1'},
+            new char[] {'1', '0', '0'},
+            new char[] {'0', '1', '1'}
+        };
+        assertEquals(3, q.numIslands(map));
     }
 }
